@@ -1,0 +1,54 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: portainer/portainer-ce:alpine
+
+    networks:
+      - traefik
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`portainer.stb.de`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      
+      - traefik.http.routers.portainer.tls.certresolver=stbde
+      - traefik.http.routers.portainer.tls.domains[0].main=portainer.stb.de
+      - traefik.http.routers.portainer.tls.domains[0].sans=*.portainer.stb.de
+
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=portainer(.stb.de)
+      - homepage.description=portainer/portainer-ce
+      - homepage.showStats=true
+      - homepage.icon=portainer.png
+      - homepage.href=https://portainer.stb.de
+      - homepage.ping=https://portainer.stb.de
+
+    restart: unless-stopped
+
+    #mem_reservation: 32m
+    #mem_limit: 64m
+
+    volumes:
+      - ./volumes/data:/data:cached
+      - /var/run/docker.sock:/var/run/docker.sock      
+      - /etc/localtime:/etc/localtime:ro
+
+    healthcheck:
+      test: wget -q --spider http://127.0.0.1:9000
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3

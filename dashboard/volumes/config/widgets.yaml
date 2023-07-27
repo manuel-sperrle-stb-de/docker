@@ -1,0 +1,14 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/widgets
+
+- greeting:
+    text_size: 4x1
+    text: Schwäbischer Turnerbund (STB) e.V.
+
+- datetime:
+    locale: de
+    text_size: 4xl
+    format:
+        dateStyle: short
+        timeStyle: short 

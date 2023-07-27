@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+
+  main:
+    
+    #image: containrrr/watchtower
+
+    build: 
+      context: build
+
+    labels:
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=watchtower
+      - homepage.description=containrrr/watchtower
+      - homepage.showStats=true
+      - homepage.icon=watchtower.png
+
+    restart: unless-stopped
+
+    env_file:
+      - ./env/watchtower.env
+    
+    #mem_reservation: 8m
+    #mem_limit: 32m
+
+    volumes:
+      - ~/.docker/config.json:/config.json
+      - /var/run/docker.sock:/var/run/docker.sock

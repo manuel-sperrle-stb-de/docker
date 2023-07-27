@@ -1,0 +1,47 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: ghcr.io/benphelps/homepage
+
+    networks:
+      - traefik
+      
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`dashboard.stb.de`)
+      - traefik.http.services.dashboard.loadbalancer.server.port=3000
+
+      - traefik.http.routers.dashboard.tls.certresolver=stbde
+      - traefik.http.routers.dashboard.tls.domains[0].main=dashboard.stb.de
+      - traefik.http.routers.dashboard.tls.domains[0].sans=*.dashboard.stb.de
+
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=dashboard(.stb.de)
+      - homepage.description=ghcr.io/benphelps/homepage
+      - homepage.showStats=true
+      - homepage.icon=homepage.png
+      - homepage.href=https://dashboard.stb.de
+      - homepage.ping=https://dashboard.stb.de
+
+    restart: unless-stopped
+
+    #mem_reservation: 64m
+    #mem_limit: 128m
+
+    volumes:
+      - ./volumes/images:/app/public/images
+      - ./volumes/config:/app/config
+      - /etc/localtime:/etc/localtime:ro

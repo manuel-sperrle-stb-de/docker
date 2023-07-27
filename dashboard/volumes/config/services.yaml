@@ -1,0 +1,13 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/services
+
+- Websites:
+    - www.stb.de:
+        href: https://www.stb.de/
+        ping: https://www.stb.de/
+
+- Websites 3rd party:
+    - fitness-im-verein.de:
+        href: https://fitness-im-verein.de/
+        ping: https://fitness-im-verein.de/

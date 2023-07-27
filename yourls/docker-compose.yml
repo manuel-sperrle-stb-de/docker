@@ -1,0 +1,97 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: yourls
+
+    depends_on:
+
+      db:
+        condition: service_healthy
+        restart: true
+
+    networks:
+      - traefik
+      - default
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.yourls.rule=Host(`yourls.stb.de`)
+      - traefik.http.services.yourls.loadbalancer.server.port=80
+
+      - traefik.http.routers.yourls.tls.certresolver=stbde
+      - traefik.http.routers.yourls.tls.domains[0].main=yourls.stb.de
+      - traefik.http.routers.yourls.tls.domains[0].sans=*.yourls.stb.de
+
+
+      # homepage
+      - homepage.group=yourls(.stb.de)
+      - homepage.name=main (yourls.stb.de)
+      - homepage.weight=-999
+      - homepage.description=yourls
+      - homepage.showStats=true
+      - homepage.icon=yourls.png
+      - homepage.href=https://yourls.stb.de/admin
+      - homepage.ping=https://yourls.stb.de/css/cal.css
+
+      
+    restart: unless-stopped
+
+    #mem_reservation: 128m
+    #mem_limit: 256m
+
+    env_file:
+      - ./env/yourls.env
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+    healthcheck:
+      test: curl -s --fail http://localhost/admin
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3      
+
+
+  db:
+
+    image: mariadb
+
+    labels:
+
+      # homepage
+      - homepage.group=yourls(.stb.de)
+      - homepage.name=db     
+      - homepage.description=mariadb
+      - homepage.showStats=true
+      - homepage.icon=mariadb.png
+
+    restart: unless-stopped
+
+    env_file:
+      - ./env/db.env
+
+    #mem_reservation: 128m
+    #mem_limit: 256m
+
+    volumes:
+      - ./volumes/db:/var/lib/mysql:cached
+      - /etc/localtime:/etc/localtime:ro
+    
+    healthcheck:
+      test: healthcheck.sh --su-mysql --connect --innodb_initialized
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3

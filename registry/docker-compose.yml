@@ -1,0 +1,58 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+  # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
+
+    image: registry
+
+    networks:
+      - traefik
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.registry.rule=Host(`registry.stb.de`)
+      - traefik.http.services.registry.loadbalancer.server.port=5000
+      
+      - traefik.http.routers.registry.tls.certresolver=stbde
+      - traefik.http.routers.registry.tls.domains[0].main=registry.stb.de
+      - traefik.http.routers.registry.tls.domains[0].sans=*.registry.stb.de
+
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=registry(.stb.de)
+      - homepage.description=registry
+      - homepage.showStats=true
+      - homepage.icon=docker.png
+      - homepage.href=https://registry.stb.de/v2
+      - homepage.ping=https://registry.stb.de
+
+    restart: unless-stopped
+
+    #mem_reservation: 16m
+    #mem_limit: 32m
+
+    env_file:
+      - ./env/registry.env
+
+    volumes:
+      - ./volumes/auth:/auth:cached
+      - ./volumes/data:/var/lib/registry:cached
+      - /etc/localtime:/etc/localtime:ro
+
+    healthcheck:
+      test: wget -q --spider http://127.0.0.1:5000
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3

@@ -1,0 +1,130 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: nginx:alpine
+
+    depends_on:
+      fpm:
+        condition: service_healthy
+        restart: true
+
+    networks:
+      - traefik
+      - default
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.wordpress.rule=Host(`wordpress.stb.de`)
+      - traefik.http.services.wordpress.loadbalancer.server.port=80
+
+      - traefik.http.routers.wordpress.tls.certresolver=stbde
+      - traefik.http.routers.wordpress.tls.domains[0].main=wordpress.stb.de
+      - traefik.http.routers.wordpress.tls.domains[0].sans=*.wordpress.stb.de
+
+
+      # homepage
+      - homepage.group=wordpress(.stb.de)
+      - homepage.name=main (wordpress.stb.de)
+      - homepage.weight=-999     
+      - homepage.description=nginx:alpine
+      - homepage.showStats=true
+      - homepage.icon=nginx.png
+      - homepage.href=https://wordpress.stb.de
+      - homepage.ping=https://wordpress.stb.de
+
+    volumes:
+      - ./volumes/nginx:/etc/nginx/conf.d:ro
+      - ./volumes/wordpress:/var/www/html:cached
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: curl -s --fail http://localhost
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3
+
+
+  fpm:
+
+    image: wordpress:fpm-alpine
+
+    depends_on:
+
+      db:
+        condition: service_healthy
+        restart: true
+
+    labels:
+
+      # homepage
+      - homepage.group=wordpress(.stb.de)
+      - homepage.name=fpm
+      - homepage.weight=-100
+      - homepage.description=wordpress:fpm-alpine
+      - homepage.showStats=true
+      - homepage.icon=wordpress.png
+      
+    restart: unless-stopped
+
+    #mem_reservation: 128m
+    #mem_limit: 256m
+
+    env_file:
+      - ./env/wordpress.env
+
+    volumes:
+      - ./volumes/wordpress:/var/www/html:cached
+      - /etc/localtime:/etc/localtime:ro
+
+    healthcheck:
+      test: netstat -tnlp | grep fpm -q
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3
+
+
+  db:
+
+    image: mariadb
+
+    labels:
+
+      # homepage
+      - homepage.group=wordpress(.stb.de)
+      - homepage.name=db
+      - homepage.description=mariadb
+      - homepage.showStats=true
+      - homepage.icon=mariadb.png
+
+    restart: unless-stopped
+
+    env_file:
+      - ./env/db.env
+
+    #mem_reservation: 128m
+    #mem_limit: 256m
+
+    volumes:
+      - ./volumes/db:/var/lib/mysql:cached
+      - /etc/localtime:/etc/localtime:ro
+    
+    healthcheck:
+      test: healthcheck.sh --su-mysql --connect --innodb_initialized
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3

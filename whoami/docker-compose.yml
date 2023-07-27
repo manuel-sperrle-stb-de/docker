@@ -1,0 +1,48 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    #image: traefik/whoami
+
+    build: 
+      context: build
+
+    networks:
+      - traefik
+
+    labels:
+
+      # traefik    
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`whoami.stb.de`)
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+
+      - traefik.http.routers.whoami.tls.certresolver=stbde
+      - traefik.http.routers.whoami.tls.domains[0].main=whoami.stb.de
+      - traefik.http.routers.whoami.tls.domains[0].sans=*.whoami.stb.de      
+
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=whoami(.stb.de)
+      - homepage.description=traefik/whoami
+      - homepage.showStats=true
+      - homepage.icon=traefik.png
+      - homepage.href=https://whoami.stb.de
+      - homepage.ping=https://whoami.stb.de
+
+    restart: unless-stopped
+
+    #mem_reservation: 6m # 6mb = docker minimum!
+    #mem_limit: 6m # 6mb = docker minimum!
+    
+    volumes:
+      - /etc/localtime:/etc/localtime:ro

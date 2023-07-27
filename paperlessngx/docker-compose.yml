@@ -1,0 +1,120 @@
+version: "3.8"
+
+networks:
+  
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: paperlessngx/paperless-ngx
+
+    depends_on:
+
+      db:
+        condition: service_healthy
+        restart: true
+
+      redis:
+        condition: service_started
+        restart: true
+
+    networks:
+      - traefik
+      - default
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.paperlessngx.rule=Host(`paperlessngx.stb.de`)
+      - traefik.http.services.paperlessngx.loadbalancer.server.port=8000
+
+      - traefik.http.routers.paperlessngx.tls.certresolver=stbde
+      - traefik.http.routers.paperlessngx.tls.domains[0].main=paperlessngx.stb.de
+      - traefik.http.routers.paperlessngx.tls.domains[0].sans=*.paperlessngx.stb.de
+
+
+      # homepage
+      - homepage.group=paperlessngx(.stb.de)
+      - homepage.name=main (paperlessngx.stb.de)
+      - homepage.weight=-999 
+      - homepage.description=paperlessngx/paperless-ngx
+      - homepage.showStats=true
+      - homepage.icon=paperless.png
+      - homepage.href=https://paperlessngx.stb.de
+      - homepage.ping=https://paperlessngx.stb.de   
+
+    restart: unless-stopped
+
+    env_file: ./env/paperlessngx.env
+
+    volumes:
+      - ./volumes/paperless/data:/usr/src/paperless/data
+      - ./volumes/paperless/media:/usr/src/paperless/media
+      - ./volumes/paperless/export:/usr/src/paperless/export
+      - ./volumes/paperless/consume:/usr/src/paperless/consume
+      - /etc/localtime:/etc/localtime:ro      
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+  redis:
+
+    image: redis:7-alpine
+
+    labels:
+
+      # homepage
+      - homepage.group=paperlessngx(.stb.de)
+      - homepage.name=redis
+      - homepage.description=redis:7-alpine
+      - homepage.showStats=true
+      - homepage.icon=redis.png
+
+    restart: unless-stopped
+
+    volumes:
+      - ./volumes/redis:/data
+      - /etc/localtime:/etc/localtime:ro
+
+
+  db:
+    
+    image: mariadb:10
+
+    labels:
+
+      # homepage
+      - homepage.group=paperlessngx(.stb.de)
+      - homepage.name=db
+      - homepage.description=mariadb:10
+      - homepage.showStats=true
+      - homepage.icon=mariadb.png
+
+    environment:
+      MARIADB_HOST: paperless
+      MARIADB_DATABASE: paperless
+      MARIADB_USER: paperless
+      MARIADB_PASSWORD: paperless
+      MARIADB_ROOT_PASSWORD: paperless
+
+    restart: unless-stopped
+
+    volumes:
+      - ./volumes/db:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+
+    healthcheck:
+      test: healthcheck.sh --su-mysql --connect --innodb_initialized
+      timeout: 5s
+      interval: 15s
+      start_period: 10s
+      retries: 3

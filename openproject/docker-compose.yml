@@ -1,0 +1,52 @@
+version: "3.8"
+
+networks:
+  
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: openproject/community:12
+
+    networks:
+      - traefik
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.openproject.rule=Host(`openproject.stb.de`)
+      - traefik.http.services.openproject.loadbalancer.server.port=80
+      
+      - traefik.http.routers.openproject.tls.certresolver=stbde
+      - traefik.http.routers.openproject.tls.domains[0].main=openproject.stb.de
+      - traefik.http.routers.openproject.tls.domains[0].sans=*.openproject.stb.de
+
+
+      # homepage
+      - homepage.group=openproject(.stb.de)
+      - homepage.name=openproject(.stb.de)
+      - homepage.description=openproject/community:12
+      - homepage.showStats=true
+      - homepage.icon=openproject.png
+      - homepage.href=https://openproject.stb.de
+      - homepage.ping=https://openproject.stb.de
+
+    restart: unless-stopped
+
+    #env_file: ./env/openproject.env
+
+    volumes:
+      - ./volumes/pgdata:/var/openproject/pgdata:cached
+      - ./volumes/assets:/var/openproject/assets:cached
+      - /etc/localtime:/etc/localtime:ro      
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

@@ -1,0 +1,48 @@
+version: "3.8"
+
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    image: ghcr.io/benphelps/homepage
+
+    networks:
+      - traefik
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.dockerstats.rule=Host(`dockerstats.stb.de`)
+      - traefik.http.services.dockerstats.loadbalancer.server.port=3000
+
+      - traefik.http.routers.dockerstats.tls.certresolver=stbde
+      - traefik.http.routers.dockerstats.tls.domains[0].main=dockerstats.stb.de
+      - traefik.http.routers.dockerstats.tls.domains[0].sans=*.dockerstats.stb.de
+
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=dockerstats(.stb.de)
+      - homepage.description=ghcr.io/benphelps/homepage
+      - homepage.showStats=true
+      - homepage.icon=homepage.png
+      - homepage.href=https://dockerstats.stb.de
+      - homepage.ping=https://dockerstats.stb.de
+
+    restart: unless-stopped
+
+    #mem_reservation: 64m
+    #mem_limit: 128m
+
+    volumes:
+      - ./volumes/images:/app/public/images
+      - ./volumes/config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
