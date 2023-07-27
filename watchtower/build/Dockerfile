@@ -1,6 +1,9 @@
-FROM containrrr/watchtower AS base
+ARG baseImage
+ARG alpineImage
 
-FROM alpine
+FROM ${baseImage} AS base
+
+FROM ${alpineImage}
 COPY --from=base /watchtower /
 
 ENTRYPOINT [ "/watchtower" ]

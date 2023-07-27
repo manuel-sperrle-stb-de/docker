@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+
+  main:
+    
+    build: 
+      context: build
+
+      args:
+        baseImage: registry.stb.de/containrrr/watchtower:1.5.3
+        alpineImage: registry.stb.de/alpine:3.18.2
+        
+      tags:
+        - registry.stb.de/watchtower-alpine:1.5.3-3.18.2

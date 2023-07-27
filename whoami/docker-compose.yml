@@ -10,10 +10,7 @@ services:
 
   main:
 
-    #image: traefik/whoami
-
-    build: 
-      context: build
+    image: registry.stb.de/whoami-alpine
 
     networks:
       - traefik

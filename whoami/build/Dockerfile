@@ -1,6 +1,9 @@
-FROM traefik/whoami AS base
+ARG baseImage
+ARG alpineImage
 
-FROM alpine
+FROM ${baseImage} AS base
+
+FROM ${alpineImage}
 COPY --from=base /whoami /
 
 ENTRYPOINT [ "/whoami" ]

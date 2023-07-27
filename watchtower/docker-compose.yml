@@ -4,10 +4,7 @@ services:
 
   main:
     
-    #image: containrrr/watchtower
-
-    build: 
-      context: build
+    image: registry.stb.de/watchtower-alpine
 
     labels:
 
