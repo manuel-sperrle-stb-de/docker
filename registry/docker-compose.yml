@@ -11,7 +11,8 @@ services:
   main:
   # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
 
-    image: registry:2.8.2
+    #image: registry:2.8.2
+    image: registry.stb.de/registry
 
     networks:
       - traefik

@@ -85,7 +85,6 @@ services:
     restart: unless-stopped
 
     volumes:
-      - ./volumes/redis:/data
       - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
