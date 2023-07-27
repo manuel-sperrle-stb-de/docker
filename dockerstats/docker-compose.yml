@@ -10,7 +10,8 @@ services:
 
   main:
 
-    image: ghcr.io/benphelps/homepage
+    #image: ghcr.io/benphelps/homepage
+    image: registry.stb.de/ghcr.io/benphelps/homepage
 
     networks:
       - traefik

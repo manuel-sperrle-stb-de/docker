@@ -10,7 +10,8 @@ services:
 
   main:
 
-    image: yourls
+    #image: yourls
+    image: registry.stb.de/yourls
 
     depends_on:
 
@@ -66,7 +67,9 @@ services:
 
   db:
 
-    image: mariadb:10
+    #image: mariadb:10
+    image: registry.stb.de/mariadb
+
     hostname: db
 
     labels:

@@ -10,7 +10,8 @@ services:
 
   main:
 
-    image: nginx:alpine
+    #image: nginx:alpine
+    image: registry.stb.de/nginx
 
     depends_on:
       fpm:
@@ -59,7 +60,8 @@ services:
 
   fpm:
 
-    image: wordpress:fpm-alpine
+    #image: wordpress:fpm-alpine
+    image: registry.stb.de/wordpress
 
     depends_on:
 
@@ -99,7 +101,8 @@ services:
 
   db:
 
-    image: mariadb
+    #image: mariadb:10
+    image: registry.stb.de/mariadb
 
     labels:
 

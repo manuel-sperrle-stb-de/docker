@@ -10,7 +10,8 @@ services:
 
   main:
 
-    image: openproject/community:12
+    #image: openproject/community:12
+    image: registry.stb.de/openproject/community
 
     networks:
       - traefik

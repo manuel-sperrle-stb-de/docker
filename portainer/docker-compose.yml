@@ -10,8 +10,9 @@ services:
 
   main:
 
-    image: portainer/portainer-ce:alpine
-
+    #image: portainer/portainer-ce:alpine
+    image: registry.stb.de/portainer/portainer-ce
+    
     networks:
       - traefik
 

@@ -10,7 +10,8 @@ services:
 
   main:
 
-    image: paperlessngx/paperless-ngx
+    #image: paperlessngx/paperless-ngx
+    image: registry.stb.de/paperlessngx/paperless-ngx
 
     depends_on:
 
@@ -68,7 +69,8 @@ services:
 
   redis:
 
-    image: redis:7-alpine
+    #image: redis:7-alpine
+    image: registry.stb.de/redis
     hostname: redis
 
     labels:
@@ -96,7 +98,9 @@ services:
 
   db:
     
-    image: mariadb:10
+    #image: mariadb:10
+    image: registry.stb.de/mariadb
+    
     hostname: db
 
     labels:

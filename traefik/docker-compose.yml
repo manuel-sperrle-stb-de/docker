@@ -10,7 +10,8 @@ services:
   main:
   # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
 
-    image: traefik
+    #image: traefik
+    image: registry.stb.de/traefik
 
     ports:
       - 80:80
