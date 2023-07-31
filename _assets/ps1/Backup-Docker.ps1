@@ -1,28 +1,10 @@
-Function Backup-Docker {
-
-    param (
-        $DockerPath = '/docker',
-        $BackupPath = '/media/sda'
-    )
-
-    $StartLocation = Get-Location
-    
-    try {
-        
-        Set-Location $DockerPath
-
-        Invoke-DockerCompose -Action Down
-
-        $TimeStamp = Get-Date -Format FileDateTimeUniversal
-        $BackupLocation = Join-Path $BackupPath ('docker-{0}.tar.gz' -f $TimeStamp)
-        tar czf $BackupLocation $DockerPath
-
-        Invoke-DockerCompose -Action Up
-
-    }
-    catch {
-        Set-Location $StartLocation
-    }
-    Set-Location $StartLocation
-
+Get-ChildItem $PSScriptRoot -Recurse -File -Filter '*.Function.ps1' | ForEach-Object {
+    $_.BaseName.TrimEnd('.Function') | Write-Host
+    . $_.FullName
 }
+
+$BackupDockerParams = @{
+    DockerPath = '/docker'
+    BackupPath = '/media/sda'
+}
+Backup-Docker @BackupDockerParams
