@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
 
   traefik:
@@ -11,8 +9,8 @@ services:
   main:
   # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
 
-    #image: registry:2.8.2
-    image: registry.stb.de/registry
+    # https://hub.docker.com/_/registry/tags
+    image: registry:2.8.2
 
     networks:
       - traefik
@@ -23,7 +21,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.registry.rule=Host(`registry.stb.de`)
       - traefik.http.services.registry.loadbalancer.server.port=5000
-      
+
       - traefik.http.routers.registry.tls.certresolver=stbde
       - traefik.http.routers.registry.tls.domains[0].main=registry.stb.de
       - traefik.http.routers.registry.tls.domains[0].sans=*.registry.stb.de
@@ -40,16 +38,13 @@ services:
 
     restart: unless-stopped
 
-    #mem_reservation: 16m
-    #mem_limit: 32m
-
     env_file:
       - ./env/registry.env
 
     volumes:
-      - ./volumes/auth:/auth:cached
-      - ./volumes/data:/var/lib/registry:cached
       - /etc/localtime:/etc/localtime:ro
+      - ./config/auth:/auth:cached
+      - ./volumes/data:/var/lib/registry:cached
 
     healthcheck:
       test: wget -q --spider http://127.0.0.1:5000

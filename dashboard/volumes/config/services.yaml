@@ -8,6 +8,14 @@
         href: https://traefik.stb.de
         ping: https://traefik.stb.de/dashboard
 
+    - dashboard.stb.de:
+        href: https://dashboard.stb.de
+        ping: https://dashboard.stb.de
+
+    - dockerstats.stb.de:
+        href: https://dockerstats.stb.de
+        ping: https://dockerstats.stb.de        
+
     - dolibarr.stb.de:
         href: https://dolibarr.stb.de
         ping: https://dolibarr.stb.de
@@ -23,6 +31,18 @@
     - ergebnisdienst.stb-liga.de:
         href: https://ergebnisdienst.stb-liga.de
         ping: https://ergebnisdienst.stb-liga.de
+
+    - feedback.stb.de:
+        href: https://feedback.stb.de
+        ping: https://feedback.stb.de
+
+    - functionaltraining.stb.de:
+        href: https://functionaltraining.stb.de
+        ping: https://functionaltraining.stb.de        
+
+    - kimai.stb.de:
+        href: https://kimai.stb.de
+        ping: https://kimai.stb.de/de/login
 
     - kuti.stb-liga.de:
         href: https://kuti.stb-liga.de
@@ -52,9 +72,17 @@
         href: https://nas.stb.de
         ping: https://nas.stb.de
 
-    - service.stb.de:
-        href: https://service.stb.de
-        ping: https://service.stb.de
+    - openproject.stb.de:
+        href: https://openproject.stb.de
+        ping: https://openproject.stb.de
+
+    - paperlessngx.stb.de:
+        href: https://paperlessngx.stb.de
+        ping: https://paperlessngx.stb.de
+
+    - pihole.stb.de:
+        href: https://pihole.stb.de
+        ping: https://pihole.stb.de/admin           
 
     - snipeitapp.stb.de:
         href: https://snipeitapp.stb.de
@@ -64,9 +92,17 @@
         href: https://voteathome.stb.de
         ping: https://voteathome.stb.de
 
+    - whoami.stb.de:
+        href: https://whoami.stb.de
+        ping: https://whoami.stb.de
+
     - wordpress.stb.de:
         href: https://wordpress.stb.de
         ping: https://wordpress.stb.de
+
+    - yourls.stb.de:
+        href: https://yourls.stb.de
+        ping: https://yourls.stb.de
 
     - zammad.stb.de:
         href: https://zammad.stb.de
@@ -114,6 +150,10 @@
     - landeskinderturnfest.org:
         href: https://www.landeskinderturnfest.org
         ping: https://www.landeskinderturnfest.org
+
+    - app.landeskinderturnfest.org:
+        href: https://app.landeskinderturnfest.org
+        ping: https://app.landeskinderturnfest.org        
 
     - landesturnfest.org:
         href: https://www.landesturnfest.org

@@ -29,23 +29,23 @@ services:
 
       # traefik
       - traefik.enable=true
-      - traefik.http.routers.wordpress.rule=Host(`wordpress.stb.de`)
-      - traefik.http.services.wordpress.loadbalancer.server.port=80
+      - traefik.http.routers.functionaltraining.rule=Host(`functionaltraining.stb.de`)
+      - traefik.http.services.functionaltraining.loadbalancer.server.port=80
 
-      - traefik.http.routers.wordpress.tls.certresolver=stbde
-      - traefik.http.routers.wordpress.tls.domains[0].main=wordpress.stb.de
-      - traefik.http.routers.wordpress.tls.domains[0].sans=*.wordpress.stb.de
+      - traefik.http.routers.functionaltraining.tls.certresolver=stbde
+      - traefik.http.routers.functionaltraining.tls.domains[0].main=functionaltraining.stb.de
+      - traefik.http.routers.functionaltraining.tls.domains[0].sans=*.functionaltraining.stb.de
 
 
       # homepage
-      - homepage.group=wordpress(.stb.de)
-      - homepage.name=main (wordpress.stb.de)
+      - homepage.group=functionaltraining(.stb.de)
+      - homepage.name=main (functionaltraining.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
       - homepage.icon=nginx.png
-      - homepage.href=https://wordpress.stb.de
-      - homepage.ping=https://wordpress.stb.de
+      - homepage.href=https://functionaltraining.stb.de
+      - homepage.ping=https://functionaltraining.stb.de
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -58,7 +58,7 @@ services:
       test: curl -s --fail http://localhost
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3
 
 
@@ -76,7 +76,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=wordpress(.stb.de)
+      - homepage.group=functionaltraining(.stb.de)
       - homepage.name=fpm
       - homepage.weight=-100
       - homepage.description=wordpress:fpm-alpine
@@ -96,7 +96,7 @@ services:
       test: netstat -tnlp | grep fpm -q
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 10s
       retries: 3
 
 
@@ -108,7 +108,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=wordpress(.stb.de)
+      - homepage.group=functionaltraining(.stb.de)
       - homepage.name=db
       - homepage.description=mariadb
       - homepage.showStats=true
@@ -122,7 +122,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./volumes/db:/var/lib/mysql:cached
-
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized

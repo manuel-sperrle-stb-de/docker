@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
 
   traefik:
@@ -10,8 +8,8 @@ services:
   main:
   # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
 
-    #image: traefik
-    image: registry.stb.de/traefik
+    # https://hub.docker.com/_/traefik/tags
+    image: traefik:v2.10.4
 
     ports:
       - 80:80
@@ -32,6 +30,10 @@ services:
       - traefik.http.routers.traefik.tls.domains[0].main=traefik.stb.de
       - traefik.http.routers.traefik.tls.domains[0].sans=*.traefik.stb.de
 
+      - traefik.tls.stores.default.defaultgeneratedcert.resolver=stbde
+      - traefik.tls.stores.default.defaultgeneratedcert.domain.main=stb.de
+      - traefik.tls.stores.default.defaultgeneratedcert.domain.sans=*.stb
+
 
       # homepage
       - homepage.group=docker
@@ -49,44 +51,14 @@ services:
 
     restart: unless-stopped
 
-    #mem_reservation: 32m
-    #mem_limit: 64m
-
-    command: 
-
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=traefik
-
-      - --api.insecure=true 
-      - --entryPoints.web.address=:80
-      - --entryPoints.websecure.address=:443
-
-      # force redirect: http -> https
-      - --entrypoints.web.http.redirections.entrypoint.to=websecure
-      - --entrypoints.web.http.redirections.entrypoint.scheme=https
-
-      - --certificatesresolvers.myresolver.acme.httpchallenge=true
-      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
-      - --certificatesresolvers.myresolver.acme.email=webmaster@stb-host.de
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-
-      - --certificatesresolvers.stbde.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
-      - --certificatesresolvers.stbde.acme.dnschallenge.provider=hetzner
-      - --certificatesresolvers.stbde.acme.dnschallenge.delaybeforecheck=0
-      - --certificatesresolvers.stbde.acme.email=webmaster@stb-host.de
-      - --certificatesresolvers.stbde.acme.storage=/letsencrypt/stb_de_hetzner_acme.json
-
-      # allow ping
-      - --ping=true
-     
     env_file:
       - ./env/traefik.env
 
     volumes:
-      - ./volumes/letsencrypt:/letsencrypt:cached
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./volumes/letsencrypt:/letsencrypt:cached
 
     healthcheck:
     # Run traefik healthcheck command

@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
 
   traefik:
@@ -10,8 +8,8 @@ services:
 
   main:
 
-    #image: ghcr.io/benphelps/homepage
-    image: registry.stb.de/ghcr.io/benphelps/homepage
+    # https://github.com/benphelps/homepage/pkgs/container/homepage
+    image: ghcr.io/benphelps/homepage:v0.6.28
 
     networks:
       - traefik
@@ -39,11 +37,8 @@ services:
 
     restart: unless-stopped
 
-    #mem_reservation: 64m
-    #mem_limit: 128m
-
     volumes:
-      - ./volumes/images:/app/public/images
-      - ./volumes/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./volumes/config:/app/config
+      - ./volumes/images:/app/public/images

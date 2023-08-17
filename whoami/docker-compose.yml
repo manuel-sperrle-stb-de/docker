@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
 
   traefik:
@@ -10,21 +8,35 @@ services:
 
   main:
 
-    image: registry.stb.de/whoami-alpine
+    image: whoami-alpine:v1.10.1-3.18.3
+
+    build:
+      context: build
+
+      args:
+
+        # https://hub.docker.com/r/traefik/whoami/tags
+        baseImage: traefik/whoami:v1.10.1
+
+        # https://hub.docker.com/_/alpine/tags
+        alpineImage: alpine:3.18.3
+
+      tags:
+        - whoami-alpine:v1.10.1-3.18.3
 
     networks:
       - traefik
 
     labels:
 
-      # traefik    
+      # traefik
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`whoami.stb.de`)
       - traefik.http.services.whoami.loadbalancer.server.port=80
 
       - traefik.http.routers.whoami.tls.certresolver=stbde
       - traefik.http.routers.whoami.tls.domains[0].main=whoami.stb.de
-      - traefik.http.routers.whoami.tls.domains[0].sans=*.whoami.stb.de      
+      - traefik.http.routers.whoami.tls.domains[0].sans=*.whoami.stb.de
 
 
       # homepage
@@ -38,8 +50,5 @@ services:
 
     restart: unless-stopped
 
-    #mem_reservation: 6m # 6mb = docker minimum!
-    #mem_limit: 6m # 6mb = docker minimum!
-    
     volumes:
       - /etc/localtime:/etc/localtime:ro

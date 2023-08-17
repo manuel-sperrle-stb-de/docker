@@ -1,0 +1,79 @@
+networks:
+
+  traefik:
+    external: true
+
+
+services:
+
+  main:
+
+    # https://hub.docker.com/r/kimai/kimai2/tags
+    image: kimai/kimai2:apache-2.0.26-prod
+
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+    networks:
+      - traefik
+      - default
+
+    labels:
+
+      # traefik
+      - traefik.enable=true
+      - traefik.http.routers.kimai.rule=Host(`kimai.stb.de`)
+      - traefik.http.services.kimai.loadbalancer.server.port=8001
+
+      - traefik.http.routers.kimai.tls.certresolver=stbde
+      - traefik.http.routers.kimai.tls.domains[0].main=kimai.stb.de
+      - traefik.http.routers.kimai.tls.domains[0].sans=*.kimai.stb.de
+
+
+      # homepage
+      - homepage.group=kimai(.stb.de)
+      - homepage.name=main (kimai.stb.de)
+      - homepage.weight=-999
+      - homepage.description=kimai/kimai2:apache
+      - homepage.showStats=true
+      - homepage.icon=kimai.png
+      - homepage.href=https://kimai.stb.de
+      - homepage.ping=https://kimai.stb.de/de/login
+
+    env_file:
+      - ./env/kimai.env
+
+    restart: unless-stopped
+
+
+  db:
+
+    # https://hub.docker.com/_/mariadb/tags
+    image: mariadb:11.0.3-jammy
+
+    labels:
+
+      # homepage
+      - homepage.group=kimai(.stb.de)
+      - homepage.name=db
+      - homepage.description=mariadb
+      - homepage.showStats=true
+      - homepage.icon=mariadb.png
+
+    restart: unless-stopped
+
+    env_file:
+      - ./env/db.env
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./volumes/db:/var/lib/mysql:cached
+
+    healthcheck:
+      test: healthcheck.sh --su-mysql --connect --innodb_initialized
+      timeout: 5s
+      interval: 15s
+      start_period: 30s
+      retries: 3

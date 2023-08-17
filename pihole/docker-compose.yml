@@ -1,7 +1,5 @@
-version: "3.8"
-
 networks:
-  
+
   traefik:
     external: true
 
@@ -10,8 +8,8 @@ services:
 
   main:
 
-    #image: pihole/pihole
-    image: registry.stb.de/pihole/pihole
+    # https://hub.docker.com/r/pihole/pihole/tags
+    image: pihole/pihole:2023.05.2
 
     ports:
       - 53:53/tcp
@@ -27,7 +25,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.pihole.rule=Host(`pihole.stb.de`)
       - traefik.http.services.pihole.loadbalancer.server.port=8053
-      
+
       - traefik.http.routers.pihole.tls.certresolver=stbde
       - traefik.http.routers.pihole.tls.domains[0].main=pihole.stb.de
       - traefik.http.routers.pihole.tls.domains[0].sans=*.pihole.stb.de
@@ -41,16 +39,13 @@ services:
       - homepage.icon=pi-hole.png
       - homepage.href=https://pihole.stb.de/admin
       - homepage.ping=https://pihole.stb.de/admin
-          
-    restart: unless-stopped
 
-    #mem_reservation: 32m
-    #mem_limit: 64m
+    restart: unless-stopped
 
     env_file:
       - ./env/pihole.env
-      
+
     volumes:
-      - ./volumes/pihole:/etc/pihole:cached
-      - ./volumes/dnsmasq.d:/etc/dnsmasq.d:cached
       - /etc/localtime:/etc/localtime:ro
+      - ./volumes/dnsmasq.d:/etc/dnsmasq.d:cached
+      - ./volumes/pihole:/etc/pihole:cached
