@@ -6,7 +6,10 @@ networks:
 
 services:
 
-  main:
+  dockerstats:
+
+    container_name: dockerstats
+    hostname: dockerstats
 
     # https://github.com/benphelps/homepage/pkgs/container/homepage
     image: ghcr.io/benphelps/homepage:v0.6.28

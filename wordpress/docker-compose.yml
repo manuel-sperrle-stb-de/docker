@@ -3,27 +3,31 @@ networks:
   traefik:
     external: true
 
+  wordpress:
 
 services:
 
-  main:
+  wordpress-main:
+
+    container_name: wordpress-main
+    hostname: wordpress-main
 
     # https://hub.docker.com/_/nginx/tags?name=alpine
     image: nginx:1.25-alpine3.18
 
     depends_on:
 
-      fpm:
+      wordpress-fpm:
         condition: service_healthy
         restart: true
 
-      db:
+      wordpress-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - wordpress
 
     labels:
 
@@ -39,7 +43,7 @@ services:
 
       # homepage
       - homepage.group=wordpress(.stb.de)
-      - homepage.name=main (wordpress.stb.de)
+      - homepage.name=wordpress-main (wordpress.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
@@ -48,7 +52,6 @@ services:
       - homepage.ping=https://wordpress.stb.de
 
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./volumes/wordpress:/var/www/html:cached
 
@@ -58,26 +61,32 @@ services:
       test: curl -s --fail http://localhost
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3
 
 
-  fpm:
+  wordpress-fpm:
+
+    container_name: wordpress-fpm
+    hostname: wordpress-fpm
 
     # https://hub.docker.com/_/wordpress/tags
     image: wordpress:6.3.0-php8.2-fpm-alpine
 
     depends_on:
 
-      db:
+      wordpress-db:
         condition: service_healthy
         restart: true
+
+    networks:
+      - wordpress
 
     labels:
 
       # homepage
       - homepage.group=wordpress(.stb.de)
-      - homepage.name=fpm
+      - homepage.name=wordpress-fpm
       - homepage.weight=-100
       - homepage.description=wordpress:fpm-alpine
       - homepage.showStats=true
@@ -89,8 +98,8 @@ services:
       - ./env/wordpress.env
 
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ./volumes/wordpress:/var/www/html:cached
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
       test: netstat -tnlp | grep fpm -q
@@ -100,16 +109,22 @@ services:
       retries: 3
 
 
-  db:
+  wordpress-db:
+
+    container_name: wordpress-db
+    hostname: wordpress-db
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+
+    networks:
+      - wordpress
 
     labels:
 
       # homepage
       - homepage.group=wordpress(.stb.de)
-      - homepage.name=db
+      - homepage.name=wordpress-db
       - homepage.description=mariadb
       - homepage.showStats=true
       - homepage.icon=mariadb.png
@@ -120,9 +135,8 @@ services:
       - ./env/db.env
 
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ./volumes/db:/var/lib/mysql:cached
-
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized

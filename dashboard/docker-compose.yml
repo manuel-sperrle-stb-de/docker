@@ -6,7 +6,10 @@ networks:
 
 services:
 
-  main:
+  dashboard:
+
+    container_name: dashboard
+    hostname: dashboard
 
     # https://github.com/benphelps/homepage/pkgs/container/homepage
     image: ghcr.io/benphelps/homepage:v0.6.28

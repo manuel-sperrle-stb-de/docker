@@ -3,23 +3,28 @@ networks:
   traefik:
     external: true
 
+  yourls:
+
 
 services:
 
-  main:
+  yourls-main:
+
+    container_name: yourls-main
+    hostname: yourls-main
 
     # https://hub.docker.com/_/yourls/tags
     image: yourls:1.9.2-apache
 
     depends_on:
 
-      db:
+      yourls-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - yourls
 
     labels:
 
@@ -35,7 +40,7 @@ services:
 
       # homepage
       - homepage.group=yourls(.stb.de)
-      - homepage.name=main (yourls.stb.de)
+      - homepage.name=yourls-main (yourls.stb.de)
       - homepage.weight=-999
       - homepage.description=yourls
       - homepage.showStats=true
@@ -60,16 +65,22 @@ services:
       retries: 3
 
 
-  db:
+  yourls-db:
+
+    container_name: yourls-db
+    hostname: yourls-db
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+
+    networks:
+      - yourls
 
     labels:
 
       # homepage
       - homepage.group=yourls(.stb.de)
-      - homepage.name=db
+      - homepage.name=yourls-db
       - homepage.description=mariadb
       - homepage.showStats=true
       - homepage.icon=mariadb.png
@@ -80,8 +91,8 @@ services:
       - ./env/db.env
 
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ./volumes/db:/var/lib/mysql:cached
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized

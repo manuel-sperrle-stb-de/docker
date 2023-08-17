@@ -6,7 +6,10 @@ networks:
 
 services:
 
-  main:
+  portainer:
+
+    container_name: portainer
+    hostname: portainer
 
     # https://hub.docker.com/r/portainer/portainer-ce/tags
     image: portainer/portainer-ce:2.18.4-alpine
@@ -46,5 +49,5 @@ services:
       test: wget -q --spider http://127.0.0.1:9000
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3

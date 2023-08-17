@@ -6,8 +6,11 @@ networks:
 
 services:
 
-  main:
+  registry:
   # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
+
+    container_name: registry
+    hostname: registry
 
     # https://hub.docker.com/_/registry/tags
     image: registry:2.8.2

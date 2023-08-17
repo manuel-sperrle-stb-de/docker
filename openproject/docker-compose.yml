@@ -6,7 +6,10 @@ networks:
 
 services:
 
-  main:
+  openproject:
+
+    container_name: openproject
+    hostname: openproject
 
     # https://hub.docker.com/r/openproject/community/tags
     image: openproject/community:12.5.8
@@ -27,7 +30,7 @@ services:
 
 
       # homepage
-      - homepage.group=openproject(.stb.de)
+      - homepage.group=docker
       - homepage.name=openproject(.stb.de)
       - homepage.description=openproject/community:12
       - homepage.showStats=true

@@ -3,27 +3,32 @@ networks:
   traefik:
     external: true
 
+  paperlessngx:
+
 
 services:
 
-  main:
+  paperlessngx-main:
+
+    container_name: paperlessngx-main
+    hostname: paperlessngx-main
 
     # https://hub.docker.com/r/paperlessngx/paperless-ngx/tags
     image: paperlessngx/paperless-ngx:1.17.1
 
     depends_on:
 
-      redis:
+      paperlessngx-redis:
         condition: service_healthy
         restart: true
 
-      db:
+      paperlessngx-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - paperlessngx
 
     labels:
 
@@ -39,7 +44,7 @@ services:
 
       # homepage
       - homepage.group=paperlessngx(.stb.de)
-      - homepage.name=main (paperlessngx.stb.de)
+      - homepage.name=paperlessngx-main (paperlessngx.stb.de)
       - homepage.weight=-999
       - homepage.description=paperlessngx/paperless-ngx
       - homepage.showStats=true
@@ -62,18 +67,31 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
       timeout: 10s
-      retries: 5
+      start_period: 30s
+      retries: 3
 
 
-  redis:
+  paperlessngx-redis:
+
+    container_name: paperlessngx-redis
+    hostname: paperlessngx-redis
 
     image: redis:7.2.0-alpine3.18
+
+    depends_on:
+
+      paperlessngx-db:
+        condition: service_healthy
+        restart: true
+
+    networks:
+      - paperlessngx
 
     labels:
 
       # homepage
       - homepage.group=paperlessngx(.stb.de)
-      - homepage.name=redis
+      - homepage.name=paperlessngx-redis
       - homepage.description=redis:7-alpine
       - homepage.showStats=true
       - homepage.icon=redis.png
@@ -87,21 +105,27 @@ services:
       test: redis-cli ping | grep PONG -q
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3
 
 
-  db:
+  paperlessngx-db:
+
+    container_name: paperlessngx-db
+    hostname: paperlessngx-db
 
     # PaperlessNGX: 10.11.5-jammy
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:10.11.5-jammy
 
+    networks:
+      - paperlessngx
+
     labels:
 
       # homepage
       - homepage.group=paperlessngx(.stb.de)
-      - homepage.name=db
+      - homepage.name=paperlessngx-db
       - homepage.description=mariadb:10
       - homepage.showStats=true
       - homepage.icon=mariadb.png

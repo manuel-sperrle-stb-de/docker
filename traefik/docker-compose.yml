@@ -5,8 +5,11 @@ networks:
 
 services:
 
-  main:
+  traefik:
   # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
+
+    container_name: traefik
+    hostname: traefik
 
     # https://hub.docker.com/_/traefik/tags
     image: traefik:v2.10.4

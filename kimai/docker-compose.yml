@@ -3,22 +3,27 @@ networks:
   traefik:
     external: true
 
+  kimai:
+
 
 services:
 
-  main:
+  kimai-main:
+
+    container_name: kimai-main
+    hostname: kimai-main
 
     # https://hub.docker.com/r/kimai/kimai2/tags
     image: kimai/kimai2:apache-2.0.26-prod
 
     depends_on:
-      db:
+      kimai-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - kimai
 
     labels:
 
@@ -34,7 +39,7 @@ services:
 
       # homepage
       - homepage.group=kimai(.stb.de)
-      - homepage.name=main (kimai.stb.de)
+      - homepage.name=kimai-main (kimai.stb.de)
       - homepage.weight=-999
       - homepage.description=kimai/kimai2:apache
       - homepage.showStats=true
@@ -48,16 +53,22 @@ services:
     restart: unless-stopped
 
 
-  db:
+  kimai-db:
+
+    container_name: kimai-db
+    hostname: kimai-db
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+
+    networks:
+      - kimai
 
     labels:
 
       # homepage
       - homepage.group=kimai(.stb.de)
-      - homepage.name=db
+      - homepage.name=kimai-db
       - homepage.description=mariadb
       - homepage.showStats=true
       - homepage.icon=mariadb.png

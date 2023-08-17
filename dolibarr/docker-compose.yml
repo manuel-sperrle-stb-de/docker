@@ -3,22 +3,26 @@ networks:
   traefik:
     external: true
 
+  dolibarr:
 
 services:
 
-  main:
+  dolibarr-main:
+
+    container_name: dolibarr-main
+    hostname: dolibarr-main
 
     # https://hub.docker.com/r/tuxgasy/dolibarr/tags
     image: tuxgasy/dolibarr:17.0.2
 
     depends_on:
-      db:
+      dolibarr-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - dolibarr
 
     labels:
 
@@ -34,7 +38,7 @@ services:
 
       # homepage
       - homepage.group=dolibarr(.stb.de)
-      - homepage.name=main (dolibarr.stb.de)
+      - homepage.name=dolibarr-main (dolibarr.stb.de)
       - homepage.weight=-999
       - homepage.description=tuxgasy/dolibarr
       - homepage.showStats=true
@@ -51,20 +55,26 @@ services:
       test: curl -s --fail http://localhost
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3
 
 
-  db:
+  dolibarr-db:
+
+    container_name: dolibarr-db
+    hostname: dolibarr-db
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+
+    networks:
+      - dolibarr
 
     labels:
 
       # homepage
       - homepage.group=dolibarr(.stb.de)
-      - homepage.name=db
+      - homepage.name=dolibarr-db
       - homepage.description=mariadb
       - homepage.showStats=true
       - homepage.icon=mariadb.png

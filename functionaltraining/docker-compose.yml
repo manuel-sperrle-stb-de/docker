@@ -3,27 +3,32 @@ networks:
   traefik:
     external: true
 
+  functionaltraining:
+
 
 services:
 
-  main:
+  functionaltraining-main:
+
+    container_name: functionaltraining-main
+    hostname: functionaltraining-main
 
     # https://hub.docker.com/_/nginx/tags?name=alpine
     image: nginx:1.25-alpine3.18
 
     depends_on:
 
-      fpm:
+      functionaltraining-fpm:
         condition: service_healthy
         restart: true
 
-      db:
+      functionaltraining-db:
         condition: service_healthy
         restart: true
 
     networks:
       - traefik
-      - default
+      - functionaltraining
 
     labels:
 
@@ -39,7 +44,7 @@ services:
 
       # homepage
       - homepage.group=functionaltraining(.stb.de)
-      - homepage.name=main (functionaltraining.stb.de)
+      - homepage.name=functionaltraining-main (functionaltraining.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
@@ -62,14 +67,20 @@ services:
       retries: 3
 
 
-  fpm:
+  functionaltraining-fpm:
+
+    container_name: functionaltraining-fpm
+    hostname: functionaltraining-fpm
 
     # https://hub.docker.com/_/wordpress/tags
     image: wordpress:6.3.0-php8.2-fpm-alpine
 
+    networks:
+      - functionaltraining
+
     depends_on:
 
-      db:
+      functionaltraining-db:
         condition: service_healthy
         restart: true
 
@@ -77,7 +88,7 @@ services:
 
       # homepage
       - homepage.group=functionaltraining(.stb.de)
-      - homepage.name=fpm
+      - homepage.name=functionaltraining-fpm
       - homepage.weight=-100
       - homepage.description=wordpress:fpm-alpine
       - homepage.showStats=true
@@ -96,20 +107,26 @@ services:
       test: netstat -tnlp | grep fpm -q
       timeout: 5s
       interval: 15s
-      start_period: 10s
+      start_period: 30s
       retries: 3
 
 
-  db:
+  functionaltraining-db:
+
+    container_name: functionaltraining-db
+    hostname: functionaltraining-db
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+
+    networks:
+      - functionaltraining
 
     labels:
 
       # homepage
       - homepage.group=functionaltraining(.stb.de)
-      - homepage.name=db
+      - homepage.name=functionaltraining-db
       - homepage.description=mariadb
       - homepage.showStats=true
       - homepage.icon=mariadb.png
