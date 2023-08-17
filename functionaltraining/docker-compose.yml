@@ -8,10 +8,10 @@ networks:
 
 services:
 
-  functionaltraining-main:
+  functionaltraining:
 
-    container_name: functionaltraining-main
-    hostname: functionaltraining-main
+    container_name: functionaltraining
+    hostname: functionaltraining
 
     # https://hub.docker.com/_/nginx/tags?name=alpine
     image: nginx:1.25-alpine3.18
@@ -44,7 +44,7 @@ services:
 
       # homepage
       - homepage.group=functionaltraining(.stb.de)
-      - homepage.name=functionaltraining-main (functionaltraining.stb.de)
+      - homepage.name=functionaltraining (functionaltraining.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
@@ -144,5 +144,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3

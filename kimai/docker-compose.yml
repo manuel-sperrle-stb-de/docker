@@ -8,10 +8,10 @@ networks:
 
 services:
 
-  kimai-main:
+  kimai:
 
-    container_name: kimai-main
-    hostname: kimai-main
+    container_name: kimai
+    hostname: kimai
 
     # https://hub.docker.com/r/kimai/kimai2/tags
     image: kimai/kimai2:apache-2.0.26-prod
@@ -39,7 +39,7 @@ services:
 
       # homepage
       - homepage.group=kimai(.stb.de)
-      - homepage.name=kimai-main (kimai.stb.de)
+      - homepage.name=kimai (kimai.stb.de)
       - homepage.weight=-999
       - homepage.description=kimai/kimai2:apache
       - homepage.showStats=true
@@ -86,5 +86,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3

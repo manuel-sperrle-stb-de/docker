@@ -8,10 +8,10 @@ networks:
 
 services:
 
-  paperlessngx-main:
+  paperlessngx:
 
-    container_name: paperlessngx-main
-    hostname: paperlessngx-main
+    container_name: paperlessngx
+    hostname: paperlessngx
 
     # https://hub.docker.com/r/paperlessngx/paperless-ngx/tags
     image: paperlessngx/paperless-ngx:1.17.1
@@ -44,7 +44,7 @@ services:
 
       # homepage
       - homepage.group=paperlessngx(.stb.de)
-      - homepage.name=paperlessngx-main (paperlessngx.stb.de)
+      - homepage.name=paperlessngx (paperlessngx.stb.de)
       - homepage.weight=-999
       - homepage.description=paperlessngx/paperless-ngx
       - homepage.showStats=true
@@ -143,5 +143,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3

@@ -7,10 +7,10 @@ networks:
 
 services:
 
-  dolibarr-main:
+  dolibarr:
 
-    container_name: dolibarr-main
-    hostname: dolibarr-main
+    container_name: dolibarr
+    hostname: dolibarr
 
     # https://hub.docker.com/r/tuxgasy/dolibarr/tags
     image: tuxgasy/dolibarr:17.0.2
@@ -38,7 +38,7 @@ services:
 
       # homepage
       - homepage.group=dolibarr(.stb.de)
-      - homepage.name=dolibarr-main (dolibarr.stb.de)
+      - homepage.name=dolibarr (dolibarr.stb.de)
       - homepage.weight=-999
       - homepage.description=tuxgasy/dolibarr
       - homepage.showStats=true
@@ -92,5 +92,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3

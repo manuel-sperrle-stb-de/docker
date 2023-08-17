@@ -8,10 +8,10 @@ networks:
 
 services:
 
-  yourls-main:
+  yourls:
 
-    container_name: yourls-main
-    hostname: yourls-main
+    container_name: yourls
+    hostname: yourls
 
     # https://hub.docker.com/_/yourls/tags
     image: yourls:1.9.2-apache
@@ -40,7 +40,7 @@ services:
 
       # homepage
       - homepage.group=yourls(.stb.de)
-      - homepage.name=yourls-main (yourls.stb.de)
+      - homepage.name=yourls (yourls.stb.de)
       - homepage.weight=-999
       - homepage.description=yourls
       - homepage.showStats=true
@@ -98,5 +98,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3

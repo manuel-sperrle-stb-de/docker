@@ -7,10 +7,10 @@ networks:
 
 services:
 
-  wordpress-main:
+  wordpress:
 
-    container_name: wordpress-main
-    hostname: wordpress-main
+    container_name: wordpress
+    hostname: wordpress
 
     # https://hub.docker.com/_/nginx/tags?name=alpine
     image: nginx:1.25-alpine3.18
@@ -43,7 +43,7 @@ services:
 
       # homepage
       - homepage.group=wordpress(.stb.de)
-      - homepage.name=wordpress-main (wordpress.stb.de)
+      - homepage.name=wordpress (wordpress.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
@@ -142,5 +142,5 @@ services:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       timeout: 5s
       interval: 15s
-      start_period: 30s
+      start_period: 60s
       retries: 3
