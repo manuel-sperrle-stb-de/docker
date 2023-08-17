@@ -43,7 +43,7 @@ services:
 
 
       # homepage
-      - homepage.group=paperlessngx(.stb.de)
+      - homepage.group=paperlessngx (.stb.de)
       - homepage.name=paperlessngx (paperlessngx.stb.de)
       - homepage.weight=-999
       - homepage.description=paperlessngx/paperless-ngx
@@ -90,7 +90,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=paperlessngx(.stb.de)
+      - homepage.group=paperlessngx (.stb.de)
       - homepage.name=paperlessngx-redis
       - homepage.description=redis:7-alpine
       - homepage.showStats=true
@@ -124,7 +124,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=paperlessngx(.stb.de)
+      - homepage.group=paperlessngx (.stb.de)
       - homepage.name=paperlessngx-db
       - homepage.description=mariadb:10
       - homepage.showStats=true

@@ -39,7 +39,7 @@ services:
 
 
       # homepage
-      - homepage.group=yourls(.stb.de)
+      - homepage.group=yourls (.stb.de)
       - homepage.name=yourls (yourls.stb.de)
       - homepage.weight=-999
       - homepage.description=yourls
@@ -79,7 +79,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=yourls(.stb.de)
+      - homepage.group=yourls (.stb.de)
       - homepage.name=yourls-db
       - homepage.description=mariadb
       - homepage.showStats=true

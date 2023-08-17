@@ -31,7 +31,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=openproject(.stb.de)
+      - homepage.name=openproject (.stb.de)
       - homepage.description=openproject/community:12
       - homepage.showStats=true
       - homepage.icon=openproject.png

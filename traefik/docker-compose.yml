@@ -40,7 +40,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=traefik(.stb.de)
+      - homepage.name=traefik (.stb.de)
       - homepage.weight=-999
       - homepage.description=traefik
       - homepage.showStats=true

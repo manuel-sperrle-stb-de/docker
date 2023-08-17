@@ -37,7 +37,7 @@ services:
 
 
       # homepage
-      - homepage.group=dolibarr(.stb.de)
+      - homepage.group=dolibarr (.stb.de)
       - homepage.name=dolibarr (dolibarr.stb.de)
       - homepage.weight=-999
       - homepage.description=tuxgasy/dolibarr
@@ -73,7 +73,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=dolibarr(.stb.de)
+      - homepage.group=dolibarr (.stb.de)
       - homepage.name=dolibarr-db
       - homepage.description=mariadb
       - homepage.showStats=true

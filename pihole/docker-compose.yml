@@ -36,7 +36,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=pihole(.stb.de)
+      - homepage.name=pihole (.stb.de)
       - homepage.description=pihole/pihole
       - homepage.showStats=true
       - homepage.icon=pi-hole.png

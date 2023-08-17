@@ -43,7 +43,7 @@ services:
 
 
       # homepage
-      - homepage.group=functionaltraining(.stb.de)
+      - homepage.group=functionaltraining (.stb.de)
       - homepage.name=functionaltraining (functionaltraining.stb.de)
       - homepage.weight=-999
       - homepage.description=nginx:alpine
@@ -87,7 +87,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=functionaltraining(.stb.de)
+      - homepage.group=functionaltraining (.stb.de)
       - homepage.name=functionaltraining-fpm
       - homepage.weight=-100
       - homepage.description=wordpress:fpm-alpine
@@ -125,7 +125,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=functionaltraining(.stb.de)
+      - homepage.group=functionaltraining (.stb.de)
       - homepage.name=functionaltraining-db
       - homepage.description=mariadb
       - homepage.showStats=true

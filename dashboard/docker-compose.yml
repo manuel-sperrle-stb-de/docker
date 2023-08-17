@@ -31,7 +31,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=dashboard(.stb.de)
+      - homepage.name=dashboard (.stb.de)
       - homepage.description=ghcr.io/benphelps/homepage
       - homepage.showStats=true
       - homepage.icon=homepage.png

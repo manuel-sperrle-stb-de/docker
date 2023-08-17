@@ -38,7 +38,7 @@ services:
 
 
       # homepage
-      - homepage.group=kimai(.stb.de)
+      - homepage.group=kimai (.stb.de)
       - homepage.name=kimai (kimai.stb.de)
       - homepage.weight=-999
       - homepage.description=kimai/kimai2:apache
@@ -67,7 +67,7 @@ services:
     labels:
 
       # homepage
-      - homepage.group=kimai(.stb.de)
+      - homepage.group=kimai (.stb.de)
       - homepage.name=kimai-db
       - homepage.description=mariadb
       - homepage.showStats=true

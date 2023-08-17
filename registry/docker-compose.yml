@@ -32,7 +32,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=registry(.stb.de)
+      - homepage.name=registry (.stb.de)
       - homepage.description=registry
       - homepage.showStats=true
       - homepage.icon=docker.png

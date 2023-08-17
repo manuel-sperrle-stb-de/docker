@@ -31,7 +31,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=portainer(.stb.de)
+      - homepage.name=portainer (.stb.de)
       - homepage.description=portainer/portainer-ce
       - homepage.showStats=true
       - homepage.icon=portainer.png

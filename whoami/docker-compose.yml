@@ -44,7 +44,7 @@ services:
 
       # homepage
       - homepage.group=docker
-      - homepage.name=whoami(.stb.de)
+      - homepage.name=whoami (.stb.de)
       - homepage.description=traefik/whoami
       - homepage.showStats=true
       - homepage.icon=traefik.png
