@@ -61,8 +61,8 @@ services:
 
     healthcheck:
       test: curl -s --fail http://localhost
-      timeout: 5s
-      interval: 15s
+      timeout: 15s
+      interval: 30s
       start_period: 30s
       retries: 3
 
@@ -105,8 +105,8 @@ services:
 
     healthcheck:
       test: netstat -tnlp | grep fpm -q
-      timeout: 5s
-      interval: 15s
+      timeout: 15s
+      interval: 30s
       start_period: 30s
       retries: 3
 
@@ -142,7 +142,7 @@ services:
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 5s
-      interval: 15s
+      timeout: 15s
+      interval: 30s
       start_period: 60s
       retries: 3

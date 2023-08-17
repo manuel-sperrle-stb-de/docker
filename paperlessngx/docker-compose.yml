@@ -65,8 +65,8 @@ services:
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      timeout: 15s
       interval: 30s
-      timeout: 10s
       start_period: 30s
       retries: 3
 
@@ -77,12 +77,6 @@ services:
     hostname: paperlessngx-redis
 
     image: redis:7.2.0-alpine3.18
-
-    depends_on:
-
-      paperlessngx-db:
-        condition: service_healthy
-        restart: true
 
     networks:
       - paperlessngx
@@ -103,8 +97,8 @@ services:
 
     healthcheck:
       test: redis-cli ping | grep PONG -q
-      timeout: 5s
-      interval: 15s
+      timeout: 15s
+      interval: 30s
       start_period: 30s
       retries: 3
 
@@ -141,7 +135,7 @@ services:
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 5s
-      interval: 15s
+      timeout: 15s
+      interval: 30s
       start_period: 60s
       retries: 3
