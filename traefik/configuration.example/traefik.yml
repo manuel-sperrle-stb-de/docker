@@ -30,7 +30,7 @@ ping: {}
 
 certificatesResolvers:
 
-  stbde:
+  dns:
     acme:
       storage: /letsencrypt/acme.json
       dnsChallenge:
