@@ -3,7 +3,6 @@ networks:
   traefik:
     external: true
 
-
 services:
 
   portainer:
@@ -28,7 +27,6 @@ services:
       - traefik.http.routers.portainer.tls.domains[0].main=portainer.stb.de
       - traefik.http.routers.portainer.tls.domains[0].sans=*.portainer.stb.de
 
-
       # homepage
       - homepage.group=docker
       - homepage.name=portainer (.stb.de)
@@ -47,7 +45,3 @@ services:
 
     healthcheck:
       test: wget -q --spider http://127.0.0.1:9000
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3

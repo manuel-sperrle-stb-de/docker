@@ -4,6 +4,7 @@ networks:
     external: true
 
   dolibarr:
+    enable_ipv6: true
 
 services:
 
@@ -35,7 +36,6 @@ services:
       - traefik.http.routers.dolibarr.tls.domains[0].main=dolibarr.stb.de
       - traefik.http.routers.dolibarr.tls.domains[0].sans=*.dolibarr.stb.de
 
-
       # homepage
       - homepage.group=dolibarr (.stb.de)
       - homepage.name=dolibarr (dolibarr.stb.de)
@@ -47,17 +47,15 @@ services:
       - homepage.ping=https://dolibarr.stb.de
 
     env_file:
-      - ./env/dolibarr.env
+      - ./configuration/dolibarr.env
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
 
     restart: unless-stopped
 
     healthcheck:
       test: curl -s --fail http://localhost
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
-
 
   dolibarr-db:
 
@@ -82,15 +80,12 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/db.env
+      - ./configuration/db.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./volumes/db:/var/lib/mysql:cached
 
     healthcheck:
-      test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      test: healthcheck.sh --su=root --connect --innodb_initialized
+      start_period: 15s

@@ -3,7 +3,6 @@ networks:
   traefik:
     external: true
 
-
 services:
 
   whoami:
@@ -40,7 +39,6 @@ services:
       - traefik.http.routers.whoami.tls.certresolver=stbde
       - traefik.http.routers.whoami.tls.domains[0].main=whoami.stb.de
       - traefik.http.routers.whoami.tls.domains[0].sans=*.whoami.stb.de
-
 
       # homepage
       - homepage.group=docker

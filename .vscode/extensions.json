@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode-remote.remote-ssh-edit",
+        "eamodio.gitlens",
+        "naumovs.color-highlight",
+        "hediet.vscode-drawio",
+        "nopeslide.vscode-drawio-plugin-mermaid",
+        "compilenix.vscode-zonefile",
+        "ms-vscode-remote.remote-ssh",
+        "ms-azuretools.vscode-docker",
+        "ecmel.vscode-html-css"
+    ]
+}

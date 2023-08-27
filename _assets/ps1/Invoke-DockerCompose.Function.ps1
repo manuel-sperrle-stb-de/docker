@@ -14,9 +14,13 @@ Function Invoke-DockerCompose {
         [switch]$NoDetach,
         [switch]$NoForceRecreate,
         [switch]$NoRemoveOrphans,
-        [switch]$NoRenewAnonVolumes
+        [switch]$NoRenewAnonVolumes,
+
+        [int]$ThrottleLimit = 16
 
     )   
+
+    $PSDefaultParameterValues['ForEach-Object:ThrottleLimit'] = $ThrottleLimit
 
     # Get and filter files
     $Files = Get-ChildItem -Recurse -File -Filter '*docker-compose.yml' | Select-Object -ExpandProperty FullName

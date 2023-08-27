@@ -4,7 +4,7 @@ networks:
     external: true
 
   kimai:
-
+    enable_ipv6: true
 
 services:
 
@@ -36,7 +36,6 @@ services:
       - traefik.http.routers.kimai.tls.domains[0].main=kimai.stb.de
       - traefik.http.routers.kimai.tls.domains[0].sans=*.kimai.stb.de
 
-
       # homepage
       - homepage.group=kimai (.stb.de)
       - homepage.name=kimai (kimai.stb.de)
@@ -48,10 +47,12 @@ services:
       - homepage.ping=https://kimai.stb.de/de/login
 
     env_file:
-      - ./env/kimai.env
+      - ./configuration/kimai.env
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
 
     restart: unless-stopped
-
 
   kimai-db:
 
@@ -76,7 +77,7 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/db.env
+      - ./configuration/db.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -84,7 +85,4 @@ services:
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      start_period: 15s

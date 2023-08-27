@@ -4,7 +4,7 @@ networks:
     external: true
 
   paperlessngx:
-
+    enable_ipv6: true
 
 services:
 
@@ -41,7 +41,6 @@ services:
       - traefik.http.routers.paperlessngx.tls.domains[0].main=paperlessngx.stb.de
       - traefik.http.routers.paperlessngx.tls.domains[0].sans=*.paperlessngx.stb.de
 
-
       # homepage
       - homepage.group=paperlessngx (.stb.de)
       - homepage.name=paperlessngx (paperlessngx.stb.de)
@@ -54,7 +53,7 @@ services:
 
     restart: unless-stopped
 
-    env_file: ./env/paperlessngx.env
+    env_file: ./configuration/paperlessngx.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -64,12 +63,7 @@ services:
       - ./volumes/paperless/media:/usr/src/paperless/media
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
-
+      test: [ "CMD", "curl", "-f", "http://localhost:8000" ]
 
   paperlessngx-redis:
 
@@ -97,11 +91,6 @@ services:
 
     healthcheck:
       test: redis-cli ping | grep PONG -q
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
-
 
   paperlessngx-db:
 
@@ -125,7 +114,7 @@ services:
       - homepage.icon=mariadb.png
 
     env_file:
-      - ./env/db.env
+      - ./configuration/db.env
 
     restart: unless-stopped
 
@@ -134,8 +123,5 @@ services:
       - ./volumes/db:/var/lib/mysql
 
     healthcheck:
-      test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      test: healthcheck.sh --su=root --connect --innodb_initialized
+      start_period: 15s

@@ -4,6 +4,7 @@ networks:
     external: true
 
   wordpress:
+    enable_ipv6: true
 
 services:
 
@@ -40,7 +41,6 @@ services:
       - traefik.http.routers.wordpress.tls.domains[0].main=wordpress.stb.de
       - traefik.http.routers.wordpress.tls.domains[0].sans=*.wordpress.stb.de
 
-
       # homepage
       - homepage.group=wordpress (.stb.de)
       - homepage.name=wordpress (wordpress.stb.de)
@@ -52,18 +52,13 @@ services:
       - homepage.ping=https://wordpress.stb.de
 
     volumes:
-      - ./config/nginx:/etc/nginx/conf.d:ro
+      - ./configuration/nginx:/etc/nginx/conf.d:ro
       - ./volumes/wordpress:/var/www/html:cached
 
     restart: unless-stopped
 
     healthcheck:
       test: curl -s --fail http://localhost
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
-
 
   wordpress-fpm:
 
@@ -95,7 +90,7 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/wordpress.env
+      - ./configuration/wordpress.env
 
     volumes:
       - ./volumes/wordpress:/var/www/html:cached
@@ -103,11 +98,6 @@ services:
 
     healthcheck:
       test: netstat -tnlp | grep fpm -q
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
-
 
   wordpress-db:
 
@@ -132,7 +122,7 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/db.env
+      - ./configuration/db.env
 
     volumes:
       - ./volumes/db:/var/lib/mysql:cached
@@ -140,7 +130,4 @@ services:
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      start_period: 15s

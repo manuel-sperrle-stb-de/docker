@@ -1,8 +1,2 @@
-*.env
-.under_contruction
-*/config/*
-*/volumes/*
-!homepage/volumes/config
-homepage/volumes/config/logs
-!dashboard/volumes/config
-dashboard/volumes/config/logs
+*/configuration
+*/volumes

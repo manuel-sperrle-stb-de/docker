@@ -1,0 +1,35 @@
+networks:
+
+  autoheal:
+    enable_ipv6: true
+
+services:
+
+  autoheal:
+
+    container_name: autoheal
+    hostname: autoheal
+
+    # https://hub.docker.com/r/willfarrell/autoheal/tags
+    image: willfarrell/autoheal:1.2.0
+
+    networks:
+      - autoheal
+
+    labels:
+
+      # homepage
+      - homepage.group=docker
+      - homepage.name=autoheal
+      - homepage.description=willfarrell/autoheal
+      - homepage.showStats=true
+      - homepage.icon=docker.png
+
+    restart: always
+
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock

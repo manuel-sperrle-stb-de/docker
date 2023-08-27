@@ -1,0 +1,40 @@
+api:
+  insecure: true
+  dashboard: true
+
+log:
+  level: DEBUG
+
+providers:
+
+  docker:
+    exposedByDefault: false
+    network: traefik
+
+entryPoints:
+
+  web:
+    address: :80
+    http:
+
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: :443
+
+# enable ping
+ping: {}
+
+certificatesResolvers:
+
+  stbde:
+    acme:
+      storage: /letsencrypt/acme.json
+      dnsChallenge:
+        provider: hetzner
+        resolvers:
+          - "8.8.8.8"
+          - "1.1.1.1"

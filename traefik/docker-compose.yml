@@ -6,7 +6,7 @@ networks:
 services:
 
   traefik:
-  # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
+    # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
 
     container_name: traefik
     hostname: traefik
@@ -37,7 +37,6 @@ services:
       - traefik.tls.stores.default.defaultgeneratedcert.domain.main=stb.de
       - traefik.tls.stores.default.defaultgeneratedcert.domain.sans=*.stb
 
-
       # homepage
       - homepage.group=docker
       - homepage.name=traefik (.stb.de)
@@ -55,20 +54,16 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/traefik.env
+      - ./configuration/traefik.env
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./configuration/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./volumes/letsencrypt:/letsencrypt:cached
 
     healthcheck:
-    # Run traefik healthcheck command
-    # https://doc.traefik.io/traefik/operations/cli/#healthcheck
-    # ! depends on: ping=true
+      # Run traefik healthcheck command
+      # https://doc.traefik.io/traefik/operations/cli/#healthcheck
+      # ! depends on: ping=true
       test: traefik healthcheck --ping
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3

@@ -3,7 +3,6 @@ networks:
   traefik:
     external: true
 
-
 services:
 
   dockerstats:
@@ -28,7 +27,6 @@ services:
       - traefik.http.routers.dockerstats.tls.domains[0].main=dockerstats.stb.de
       - traefik.http.routers.dockerstats.tls.domains[0].sans=*.dockerstats.stb.de
 
-
       # homepage
       - homepage.group=docker
       - homepage.name=dockerstats (.stb.de)
@@ -43,5 +41,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./volumes/config:/app/config
-      - ./volumes/images:/app/public/images
+      - ./configuration/homepage:/app/config:ro
+      - ./configuration/images:/app/public/images:ro
+      - ./volumes/logs:/logs

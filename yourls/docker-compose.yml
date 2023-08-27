@@ -4,7 +4,7 @@ networks:
     external: true
 
   yourls:
-
+    enable_ipv6: true
 
 services:
 
@@ -37,7 +37,6 @@ services:
       - traefik.http.routers.yourls.tls.domains[0].main=yourls.stb.de
       - traefik.http.routers.yourls.tls.domains[0].sans=*.yourls.stb.de
 
-
       # homepage
       - homepage.group=yourls (.stb.de)
       - homepage.name=yourls (yourls.stb.de)
@@ -48,22 +47,16 @@ services:
       - homepage.href=https://yourls.stb.de/admin
       - homepage.ping=https://yourls.stb.de/css/cal.css
 
-
     restart: unless-stopped
 
     env_file:
-      - ./env/yourls.env
+      - ./configuration/yourls.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
       test: curl -s --fail http://localhost/admin
-      timeout: 5s
-      interval: 15s
-      start_period: 10s
-      retries: 3
-
 
   yourls-db:
 
@@ -88,15 +81,12 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/db.env
+      - ./configuration/db.env
 
     volumes:
-      - ./volumes/db:/var/lib/mysql:cached
       - /etc/localtime:/etc/localtime:ro
+      - ./volumes/db:/var/lib/mysql:cached
 
     healthcheck:
-      test: healthcheck.sh --su-mysql --connect --innodb_initialized
-      timeout: 5s
-      interval: 15s
-      start_period: 60s
-      retries: 3
+      test: healthcheck.sh --su=root --connect --innodb_initialized
+      start_period: 15s

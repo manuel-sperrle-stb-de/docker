@@ -3,7 +3,6 @@ networks:
   traefik:
     external: true
 
-
 services:
 
   openproject:
@@ -28,7 +27,6 @@ services:
       - traefik.http.routers.openproject.tls.domains[0].main=openproject.stb.de
       - traefik.http.routers.openproject.tls.domains[0].sans=*.openproject.stb.de
 
-
       # homepage
       - homepage.group=docker
       - homepage.name=openproject (.stb.de)
@@ -41,7 +39,7 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/openproject.env
+      - ./configuration/openproject.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -49,8 +47,5 @@ services:
       - ./volumes/pgdata:/var/openproject/pgdata:cached
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      timeout: 15s
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
+      start_period: 90s

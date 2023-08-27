@@ -3,11 +3,10 @@ networks:
   traefik:
     external: true
 
-
 services:
 
   registry:
-  # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
+    # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
 
     container_name: registry
     hostname: registry
@@ -29,7 +28,6 @@ services:
       - traefik.http.routers.registry.tls.domains[0].main=registry.stb.de
       - traefik.http.routers.registry.tls.domains[0].sans=*.registry.stb.de
 
-
       # homepage
       - homepage.group=docker
       - homepage.name=registry (.stb.de)
@@ -42,16 +40,12 @@ services:
     restart: unless-stopped
 
     env_file:
-      - ./env/registry.env
+      - ./configuration/registry.env
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./config/auth:/auth:cached
+      - ./configuration/auth:/auth:cached
       - ./volumes/data:/var/lib/registry:cached
 
     healthcheck:
       test: wget -q --spider http://127.0.0.1:5000
-      timeout: 15s
-      interval: 30s
-      start_period: 30s
-      retries: 3
