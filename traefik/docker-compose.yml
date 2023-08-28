@@ -31,11 +31,7 @@ services:
 
       - traefik.http.routers.traefik.tls.certresolver=stbde
       - traefik.http.routers.traefik.tls.domains[0].main=traefik.stb.de
-      - traefik.http.routers.traefik.tls.domains[0].sans=*.traefik.stb.de
-
-      - traefik.tls.stores.default.defaultgeneratedcert.resolver=stbde
-      - traefik.tls.stores.default.defaultgeneratedcert.domain.main=stb.de
-      - traefik.tls.stores.default.defaultgeneratedcert.domain.sans=*.stb
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.traefik.stb.de   
 
       # homepage
       - homepage.group=docker
@@ -49,7 +45,7 @@ services:
 
       # homepage.widget
       - homepage.widget.type=traefik
-      - homepage.widget.url=http://traefik.stb.de
+      - homepage.widget.url=https://traefik.stb.de
 
     restart: unless-stopped
 
@@ -60,6 +56,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
       - ./configuration/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./configuration/traefik.dynamic.yml:/etc/traefik/traefik.dynamic.yml:ro
+      - ./configuration/cert.crt:/cert.crt:ro
+      - ./configuration/cert.key:/cert.key:ro
       - ./volumes/letsencrypt:/letsencrypt:cached
 
     healthcheck:
