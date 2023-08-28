@@ -36,10 +36,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.functionaltraining.rule=Host(`functionaltraining.stb.de`)
       - traefik.http.services.functionaltraining.loadbalancer.server.port=80
-
+      - traefik.http.routers.functionaltraining.entrypoints=websecure
       - traefik.http.routers.functionaltraining.tls.certresolver=stbde
-      - traefik.http.routers.functionaltraining.tls.domains[0].main=functionaltraining.stb.de
-      - traefik.http.routers.functionaltraining.tls.domains[0].sans=*.functionaltraining.stb.de
 
       # homepage
       - homepage.group=functionaltraining (.stb.de)

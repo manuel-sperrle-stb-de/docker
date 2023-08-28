@@ -32,10 +32,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.yourls.rule=Host(`yourls.stb.de`)
       - traefik.http.services.yourls.loadbalancer.server.port=80
-
+      - traefik.http.routers.yourls.entrypoints=websecure
       - traefik.http.routers.yourls.tls.certresolver=stbde
-      - traefik.http.routers.yourls.tls.domains[0].main=yourls.stb.de
-      - traefik.http.routers.yourls.tls.domains[0].sans=*.yourls.stb.de
 
       # homepage
       - homepage.group=yourls (.stb.de)

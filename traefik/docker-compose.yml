@@ -28,11 +28,9 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.stb.de`)
       - traefik.http.services.traefik.loadbalancer.server.port=8080
-
+      - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=stbde
-      - traefik.http.routers.traefik.tls.domains[0].main=traefik.stb.de
-      - traefik.http.routers.traefik.tls.domains[0].sans=*.traefik.stb.de   
-
+      
       # homepage
       - homepage.group=docker
       - homepage.name=traefik (.stb.de)

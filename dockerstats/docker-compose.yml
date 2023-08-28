@@ -22,10 +22,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dockerstats.rule=Host(`dockerstats.stb.de`)
       - traefik.http.services.dockerstats.loadbalancer.server.port=3000
-
+      - traefik.http.routers.dockerstats.entrypoints=websecure
       - traefik.http.routers.dockerstats.tls.certresolver=stbde
-      - traefik.http.routers.dockerstats.tls.domains[0].main=dockerstats.stb.de
-      - traefik.http.routers.dockerstats.tls.domains[0].sans=*.dockerstats.stb.de
 
       # homepage
       - homepage.group=docker

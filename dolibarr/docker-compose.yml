@@ -31,10 +31,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dolibarr.rule=Host(`dolibarr.stb.de`)
       - traefik.http.services.dolibarr.loadbalancer.server.port=80
-
+      - traefik.http.routers.dolibarr.entrypoints=websecure
       - traefik.http.routers.dolibarr.tls.certresolver=stbde
-      - traefik.http.routers.dolibarr.tls.domains[0].main=dolibarr.stb.de
-      - traefik.http.routers.dolibarr.tls.domains[0].sans=*.dolibarr.stb.de
 
       # homepage
       - homepage.group=dolibarr (.stb.de)
