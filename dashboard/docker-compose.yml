@@ -11,7 +11,7 @@ services:
     hostname: dashboard
 
     # https://github.com/benphelps/homepage/pkgs/container/homepage
-    image: ghcr.io/benphelps/homepage:v0.6.28
+    image: ghcr.io/benphelps/homepage:v0.6.29
 
     networks:
       - traefik
@@ -22,8 +22,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dashboard.rule=Host(`dashboard.stb.de`)
       - traefik.http.services.dashboard.loadbalancer.server.port=3000
-      - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.tls.certresolver=stbde
 
       # homepage
       - homepage.group=docker

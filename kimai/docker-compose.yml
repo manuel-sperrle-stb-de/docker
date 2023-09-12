@@ -31,8 +31,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kimai.rule=Host(`kimai.stb.de`)
       - traefik.http.services.kimai.loadbalancer.server.port=8001
-      - traefik.http.routers.kimai.entrypoints=websecure
-      - traefik.http.routers.kimai.tls.certresolver=stbde
 
       # homepage
       - homepage.group=kimai (.stb.de)

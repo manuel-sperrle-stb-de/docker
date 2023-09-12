@@ -12,7 +12,7 @@ services:
     hostname: traefik
 
     # https://hub.docker.com/_/traefik/tags
-    image: traefik:v2.10.4
+    image: traefik:v3.0
 
     ports:
       - 80:80
@@ -28,9 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.stb.de`)
       - traefik.http.services.traefik.loadbalancer.server.port=8080
-      - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.tls.certresolver=stbde
-      
+
       # homepage
       - homepage.group=docker
       - homepage.name=traefik (.stb.de)
@@ -55,8 +53,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./configuration/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./configuration/traefik.dynamic.yml:/etc/traefik/traefik.dynamic.yml:ro
-      - ./configuration/cert.crt:/cert.crt:ro
-      - ./configuration/cert.key:/cert.key:ro
       - ./volumes/letsencrypt:/letsencrypt:cached
 
     healthcheck:

@@ -22,8 +22,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.openproject.rule=Host(`openproject.stb.de`)
       - traefik.http.services.openproject.loadbalancer.server.port=80
-      - traefik.http.routers.openproject.entrypoints=websecure
-      - traefik.http.routers.openproject.tls.certresolver=stbde
 
       # homepage
       - homepage.group=docker

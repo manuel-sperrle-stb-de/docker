@@ -1,6 +1,9 @@
 tls:
+
+  # default generated cert via ACME default resolver
   stores:
     default:
-      defaultCertificate:
-        certFile: /cert.crt
-        keyFile: /cert.key
+      defaultGeneratedCert:
+        resolver: hetznerdns
+        domain:
+          main: '*.yourdomain.tld'

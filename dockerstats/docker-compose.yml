@@ -11,7 +11,7 @@ services:
     hostname: dockerstats
 
     # https://github.com/benphelps/homepage/pkgs/container/homepage
-    image: ghcr.io/benphelps/homepage:v0.6.28
+    image: ghcr.io/benphelps/homepage:v0.6.29
 
     networks:
       - traefik
@@ -22,8 +22,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dockerstats.rule=Host(`dockerstats.stb.de`)
       - traefik.http.services.dockerstats.loadbalancer.server.port=3000
-      - traefik.http.routers.dockerstats.entrypoints=websecure
-      - traefik.http.routers.dockerstats.tls.certresolver=stbde
 
       # homepage
       - homepage.group=docker

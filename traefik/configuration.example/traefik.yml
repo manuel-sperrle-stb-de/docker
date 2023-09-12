@@ -1,17 +1,21 @@
 api:
   insecure: true
-  
+
+log:
+  level: DEBUG
+
 providers:
 
   file:
     filename: /etc/traefik/traefik.dynamic.yml
+    watch: true
 
-  docker: 
+  docker:
     exposedByDefault: false
     network: traefik
 
 entryPoints:
-  
+
   web:
     address: :80
     http:
@@ -22,14 +26,20 @@ entryPoints:
 
   websecure:
     address: :443
+    http:
+      tls:
+        certResolver: hetznerdns # default resolver
 
 ping: {}
 
 certificatesResolvers:
 
-  stbde:
+  hetznerdns:
     acme:
-      email: "webmaster@stb-host.de"
-      storage: "/letsencrypt/acme.json"
+      email: mail@yourdomain.com
+      storage: /letsencrypt/hetzner.json
       dnsChallenge:
         provider: hetzner
+        resolvers:
+          - 8.8.8.8
+          - 1.1.1.1

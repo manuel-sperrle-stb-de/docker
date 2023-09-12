@@ -23,8 +23,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.registry.rule=Host(`registry.stb.de`)
       - traefik.http.services.registry.loadbalancer.server.port=5000
-      - traefik.http.routers.registry.entrypoints=websecure
-      - traefik.http.routers.registry.tls.certresolver=stbde
 
       # homepage
       - homepage.group=docker
