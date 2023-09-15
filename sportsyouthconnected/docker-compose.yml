@@ -1,51 +1,44 @@
 networks:
 
+  default:
+    enable_ipv6: true
+
   traefik:
     external: true
 
-  wordpress:
-    enable_ipv6: true
-
 services:
 
-  wordpress:
-
-    container_name: wordpress
-    hostname: wordpress
+  web:
 
     # https://hub.docker.com/_/nginx/tags?name=alpine
     image: nginx:1.25-alpine3.18
 
     depends_on:
 
-      wordpress-fpm:
-        condition: service_healthy
-        restart: true
-
-      wordpress-db:
+      app:
         condition: service_healthy
         restart: true
 
     networks:
+      - default
       - traefik
-      - wordpress
 
     labels:
 
       # traefik
       - traefik.enable=true
-      - traefik.http.routers.wordpress.rule=Host(`wordpress.stb.de`)
-      - traefik.http.services.wordpress.loadbalancer.server.port=80
+      - traefik.http.routers.sportsyouthconnected.rule=Host(`sportsyouthconnected.de`)
+      - traefik.http.services.sportsyouthconnected.loadbalancer.server.port=80
 
       # homepage
-      - homepage.group=wordpress (.stb.de)
-      - homepage.name=wordpress (wordpress.stb.de)
+      - homepage.group=sportsyouthconnected (.de)
+      - homepage.name=web
       - homepage.weight=-999
       - homepage.description=nginx:alpine
       - homepage.showStats=true
       - homepage.icon=nginx.png
-      - homepage.href=https://wordpress.stb.de
-      - homepage.ping=https://wordpress.stb.de
+      - homepage.href=https://sportsyouthconnected.de
+      - homepage.ping=https://sportsyouthconnected.de
 
     volumes:
       - ./configuration/nginx:/etc/nginx/conf.d:ro
@@ -56,67 +49,52 @@ services:
     healthcheck:
       test: curl -s --fail http://localhost
 
-  wordpress-fpm:
 
-    container_name: wordpress-fpm
-    hostname: wordpress-fpm
+  app:
 
     # https://hub.docker.com/_/wordpress/tags
     image: wordpress:6.3.0-php8.2-fpm-alpine
+    restart: unless-stopped
 
     depends_on:
 
-      wordpress-db:
+      db:
         condition: service_healthy
         restart: true
 
     networks:
-      - wordpress
+      - default
 
     labels:
 
       # homepage
-      - homepage.group=wordpress (.stb.de)
-      - homepage.name=wordpress-fpm
+      - homepage.group=sportsyouthconnected (.de)
+      - homepage.name=app
       - homepage.weight=-100
       - homepage.description=wordpress:fpm-alpine
       - homepage.showStats=true
       - homepage.icon=wordpress.png
 
-    restart: unless-stopped
-
     env_file:
       - ./configuration/wordpress.env
 
     volumes:
-      - ./volumes/wordpress:/var/www/html:cached
       - /etc/localtime:/etc/localtime:ro
+      - ./configuration/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
+      - ./volumes/wordpress:/var/www/html:cached
 
     healthcheck:
       test: netstat -tnlp | grep fpm -q
 
-  wordpress-db:
 
-    container_name: wordpress-db
-    hostname: wordpress-db
+  db:
 
     # https://hub.docker.com/_/mariadb/tags
     image: mariadb:11.0.3-jammy
+    restart: unless-stopped
 
     networks:
-      - wordpress
-
-    labels:
-
-      # homepage
-      - homepage.group=wordpress (.stb.de)
-      - homepage.name=wordpress-db
-      - homepage.weight=0
-      - homepage.description=mariadb
-      - homepage.showStats=true
-      - homepage.icon=mariadb.png
-
-    restart: unless-stopped
+      - default
 
     env_file:
       - ./configuration/db.env
@@ -124,6 +102,16 @@ services:
     volumes:
       - ./volumes/db:/var/lib/mysql:cached
       - /etc/localtime:/etc/localtime:ro
+
+    labels:
+
+      # homepage
+      - homepage.group=sportsyouthconnected (.de)
+      - homepage.name=db
+      - homepage.weight=0
+      - homepage.description=mariadb
+      - homepage.showStats=true
+      - homepage.icon=mariadb.png
 
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
