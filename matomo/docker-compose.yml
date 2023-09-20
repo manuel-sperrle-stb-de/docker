@@ -24,6 +24,7 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.matomo.rule=Host(`matomo.stb.de`)
+      - traefik.http.routers.matomo.tls.certresolver=hetznerdns
       - traefik.http.routers.matomo.tls.domains[0].main=matomo.stb.de
       - traefik.http.routers.matomo.tls.domains[0].sans=*.matomo.stb.de
       - traefik.http.services.matomo.loadbalancer.server.port=80

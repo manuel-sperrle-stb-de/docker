@@ -18,6 +18,7 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.registry.rule=Host(`registry.stb.de`)
+      - traefik.http.routers.registry.tls.certresolver=hetznerdns
       - traefik.http.routers.registry.tls.domains[0].main=registry.stb.de
       - traefik.http.routers.registry.tls.domains[0].sans=*.registry.stb.de
       - traefik.http.services.registry.loadbalancer.server.port=5000
