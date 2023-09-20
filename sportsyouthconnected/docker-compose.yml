@@ -24,6 +24,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.sportsyouthconnected.rule=Host(`sportsyouthconnected.de`)
+      - traefik.http.routers.sportsyouthconnected.tls.domains[0].main=sportsyouthconnected.de
+      - traefik.http.routers.sportsyouthconnected.tls.domains[0].sans=*.sportsyouthconnected.de
       - traefik.http.services.sportsyouthconnected.loadbalancer.server.port=80
 
       # homepage

@@ -17,6 +17,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.dashboard.rule=Host(`dashboard.stb.de`)
+      - traefik.http.routers.dashboard.tls.domains[0].main=dashboard.stb.de
+      - traefik.http.routers.dashboard.tls.domains[0].sans=*.dashboard.stb.de
       - traefik.http.services.dashboard.loadbalancer.server.port=3000
 
       # homepage

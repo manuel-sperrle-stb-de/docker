@@ -24,6 +24,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.yourls.rule=Host(`yourls.stb.de`)
+      - traefik.http.routers.yourls.tls.domains[0].main=yourls.stb.de
+      - traefik.http.routers.yourls.tls.domains[0].sans=*.yourls.stb.de
       - traefik.http.services.yourls.loadbalancer.server.port=80
 
       # homepage

@@ -17,6 +17,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.stb.de`)
+      - traefik.http.routers.traefik.tls.domains[0].main=traefik.stb.de
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.traefik.stb.de
       - traefik.http.services.traefik.loadbalancer.server.port=8080
 
       # homepage

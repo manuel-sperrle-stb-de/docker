@@ -17,6 +17,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.portainer.rule=Host(`portainer.stb.de`)
+      - traefik.http.routers.portainer.tls.domains[0].main=portainer.stb.de
+      - traefik.http.routers.portainer.tls.domains[0].sans=*.portainer.stb.de
       - traefik.http.services.portainer.loadbalancer.server.port=9000
 
       # homepage

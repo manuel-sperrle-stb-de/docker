@@ -17,6 +17,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.dockerstats.rule=Host(`dockerstats.stb.de`)
+      - traefik.http.routers.dockerstats.tls.domains[0].main=dockerstats.stb.de
+      - traefik.http.routers.dockerstats.tls.domains[0].sans=*.dockerstats.stb.de
       - traefik.http.services.dockerstats.loadbalancer.server.port=3000
 
       # homepage

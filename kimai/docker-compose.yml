@@ -24,6 +24,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.kimai.rule=Host(`kimai.stb.de`)
+      - traefik.http.routers.kimai.tls.domains[0].main=kimai.stb.de
+      - traefik.http.routers.kimai.tls.domains[0].sans=*.kimai.stb.de
       - traefik.http.services.kimai.loadbalancer.server.port=8001
 
       # homepage

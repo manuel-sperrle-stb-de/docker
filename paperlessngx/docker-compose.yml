@@ -29,6 +29,8 @@ services:
       # traefik
       - traefik.enable=true
       - traefik.http.routers.paperlessngx.rule=Host(`paperlessngx.stb.de`)
+      - traefik.http.routers.paperlessngx.tls.domains[0].main=paperlessngx.stb.de
+      - traefik.http.routers.paperlessngx.tls.domains[0].sans=*.paperlessngx.stb.de
       - traefik.http.services.paperlessngx.loadbalancer.server.port=8000
 
       # homepage
