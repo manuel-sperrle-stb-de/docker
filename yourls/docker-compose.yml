@@ -1,31 +1,24 @@
 networks:
 
+  default:
+    enable_ipv6: true
+
   traefik:
     external: true
 
-  yourls:
-    enable_ipv6: true
-
 services:
 
+  # https://hub.docker.com/_/yourls
   yourls:
 
-    container_name: yourls
-    hostname: yourls
-
-    # https://hub.docker.com/_/yourls/tags
+    # image, build, depends_on, command
     image: yourls:1.9.2-apache
-
     depends_on:
-
-      yourls-db:
+      mariadb:
         condition: service_healthy
         restart: true
 
-    networks:
-      - traefik
-      - yourls
-
+    # labels
     labels:
 
       # traefik
@@ -34,55 +27,70 @@ services:
       - traefik.http.services.yourls.loadbalancer.server.port=80
 
       # homepage
-      - homepage.group=yourls (.stb.de)
-      - homepage.name=yourls (yourls.stb.de)
       - homepage.weight=-999
-      - homepage.description=yourls
-      - homepage.showStats=true
+      - homepage.group=yourls (.stb.de)
+      - homepage.name=yourls
+      - homepage.description=yourls:1.9.2-apache
       - homepage.icon=yourls.png
       - homepage.href=https://yourls.stb.de/admin
       - homepage.ping=https://yourls.stb.de/css/cal.css
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+      - traefik
 
+    # env_file, environment
     env_file:
-      - ./configuration/yourls.env
+      - ./config/.env
 
+    # volumes
     volumes:
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
 
+    # healthcheck, restart
     healthcheck:
       test: curl -s --fail http://localhost/admin
+    restart: unless-stopped
 
-  yourls-db:
+  # https://hub.docker.com/_/mariadb
+  mariadb:
 
-    container_name: yourls-db
-    hostname: yourls-db
-
-    # https://hub.docker.com/_/mariadb/tags
+    # image, build, depends_on, command
     image: mariadb:11.0.3-jammy
 
-    networks:
-      - yourls
-
+    # labels
     labels:
 
       # homepage
       - homepage.group=yourls (.stb.de)
-      - homepage.name=yourls-db
-      - homepage.description=mariadb
-      - homepage.showStats=true
+      - homepage.name=mariadb
+      - homepage.description=mariadb:11.0.3-jammy
       - homepage.icon=mariadb.png
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - default
 
+    # env_file, environment
     env_file:
-      - ./configuration/db.env
+      - ./config/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/db:/var/lib/mysql:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/mariadb/mysql:/var/lib/mysql:cached
+
+    # healthcheck, restart
     healthcheck:
       test: healthcheck.sh --su=root --connect --innodb_initialized
       start_period: 15s
+    restart: unless-stopped

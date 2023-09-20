@@ -5,23 +5,13 @@ networks:
 
 services:
 
+  # https://hub.docker.com/_/traefik
   traefik:
-    # https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
 
-    container_name: traefik
-    hostname: traefik
-
-    # https://hub.docker.com/_/traefik/tags
+    # image, build, depends_on, command
     image: traefik:v3.0
 
-    ports:
-      - 80:80
-      - 443:443
-      - 8080:8080
-
-    networks:
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -30,33 +20,50 @@ services:
       - traefik.http.services.traefik.loadbalancer.server.port=8080
 
       # homepage
-      - homepage.group=docker
-      - homepage.name=traefik (.stb.de)
-      - homepage.weight=-999
-      - homepage.description=traefik
-      - homepage.showStats=true
+      - homepage.group=traefik (.stb.de)
+      - homepage.name=traefik
+      - homepage.description=traefik:v3.0
       - homepage.icon=traefik.png
       - homepage.href=https://traefik.stb.de/dashboard
       - homepage.ping=https://traefik.stb.de/dashboard
+      - homepage.showStats=true
 
       # homepage.widget
       - homepage.widget.type=traefik
       - homepage.widget.url=https://traefik.stb.de
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - traefik
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
 
+    # env_file, environment
     env_file:
-      - ./configuration/traefik.env
+      - ./config/.env
 
+    # volumes
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/localtime:/etc/localtime:ro
-      - ./configuration/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./configuration/traefik.dynamic.yml:/etc/traefik/traefik.dynamic.yml:ro
-      - ./volumes/letsencrypt:/letsencrypt:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # config
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/dynamic:/etc/traefik/dynamic:ro
+
+      # data
+      - ./data/letsencrypt:/letsencrypt:cached
+
+    # healthcheck, restart
     healthcheck:
       # Run traefik healthcheck command
       # https://doc.traefik.io/traefik/operations/cli/#healthcheck
       # ! depends on: ping=true
       test: traefik healthcheck --ping
+    restart: unless-stopped

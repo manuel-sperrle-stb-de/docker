@@ -1,35 +1,29 @@
 networks:
 
+  default:
+    enable_ipv6: true
+
   traefik:
     external: true
 
-  paperlessngx:
-    enable_ipv6: true
-
 services:
 
+  # https://hub.docker.com/r/paperlessngx/paperless-ngx
   paperlessngx:
 
-    container_name: paperlessngx
-    hostname: paperlessngx
-
-    # https://hub.docker.com/r/paperlessngx/paperless-ngx/tags
+    # image, build, depends_on, command
     image: paperlessngx/paperless-ngx:1.17.1
-
     depends_on:
 
-      paperlessngx-redis:
+      redis:
         condition: service_healthy
         restart: true
 
-      paperlessngx-db:
+      mariadb:
         condition: service_healthy
         restart: true
 
-    networks:
-      - traefik
-      - paperlessngx
-
+    # labels
     labels:
 
       # traefik
@@ -38,86 +32,112 @@ services:
       - traefik.http.services.paperlessngx.loadbalancer.server.port=8000
 
       # homepage
-      - homepage.group=paperlessngx (.stb.de)
-      - homepage.name=paperlessngx (paperlessngx.stb.de)
       - homepage.weight=-999
-      - homepage.description=paperlessngx/paperless-ngx
-      - homepage.showStats=true
+      - homepage.group=paperlessngx (.stb.de)
+      - homepage.name=paperlessngx
+      - homepage.description=paperlessngx/paperless-ngx:1.17.1
       - homepage.icon=paperless.png
       - homepage.href=https://paperlessngx.stb.de
       - homepage.ping=https://paperlessngx.stb.de
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+      - traefik
 
-    env_file: ./configuration/paperlessngx.env
+    # env_file, environment
+    env_file:
+      - ./config/.env
+      - ./config/paperlessngx/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/paperless/consume:/usr/src/paperless/consume
-      - ./volumes/paperless/data:/usr/src/paperless/data
-      - ./volumes/paperless/export:/usr/src/paperless/export
-      - ./volumes/paperless/media:/usr/src/paperless/media
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/paperlessngx/consume:/usr/src/paperless/consume
+      - ./data/paperlessngx/data:/usr/src/paperless/data
+      - ./data/paperlessngx/export:/usr/src/paperless/export
+      - ./data/paperlessngx/media:/usr/src/paperless/media
+
+    # healthcheck, restart
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000" ]
+    restart: unless-stopped
 
-  paperlessngx-redis:
+  # https://hub.docker.com/_/redis
+  redis:
 
-    container_name: paperlessngx-redis
-    hostname: paperlessngx-redis
-
+    # image, build, depends_on, command
     image: redis:7.2.0-alpine3.18
 
-    networks:
-      - paperlessngx
-
+    # labels
     labels:
 
       # homepage
+      - homepage.weight=-500
       - homepage.group=paperlessngx (.stb.de)
-      - homepage.name=paperlessngx-redis
-      - homepage.description=redis:7-alpine
-      - homepage.showStats=true
+      - homepage.name=redis
+      - homepage.description=redis:7.2.0-alpine3.18
       - homepage.icon=redis.png
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - default
 
+    # volumes
     volumes:
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
 
+    # healthcheck, restart
     healthcheck:
       test: redis-cli ping | grep PONG -q
+    restart: unless-stopped
 
-  paperlessngx-db:
+  # https://hub.docker.com/_/mariadb
+  mariadb:
 
-    container_name: paperlessngx-db
-    hostname: paperlessngx-db
-
-    # PaperlessNGX: 10.11.5-jammy
-    # https://hub.docker.com/_/mariadb/tags
+    # image, build, depends_on, command
+    #! PaperlessNGX: 10.11.5-jammy
     image: mariadb:10.11.5-jammy
 
-    networks:
-      - paperlessngx
-
+    # labels
     labels:
 
       # homepage
+      - homepage.weight=-100
       - homepage.group=paperlessngx (.stb.de)
-      - homepage.name=paperlessngx-db
-      - homepage.description=mariadb:10
-      - homepage.showStats=true
+      - homepage.name=mariadb
+      - homepage.description=mariadb:10.11.5-jammy
       - homepage.icon=mariadb.png
+      - homepage.showStats=true
 
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+
+    # env_file, environment
     env_file:
-      - ./configuration/db.env
+      - ./config/.env
+      - ./config/mariadb/.env
 
-    restart: unless-stopped
-
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/db:/var/lib/mysql
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/mariadb/mysql:/var/lib/mysql:cached
+
+    # healthcheck, restart
     healthcheck:
       test: healthcheck.sh --su=root --connect --innodb_initialized
       start_period: 15s
+    restart: unless-stopped

@@ -8,21 +8,17 @@ networks:
 
 services:
 
-  web:
+  # https://hub.docker.com/_/nginx
+  nginx:
 
-    # https://hub.docker.com/_/nginx/tags?name=alpine
+    # image, build, depends_on, command
     image: nginx:1.25-alpine3.18
-
     depends_on:
-
-      app:
+      wordpress:
         condition: service_healthy
         restart: true
 
-    networks:
-      - default
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -31,88 +27,111 @@ services:
       - traefik.http.services.sportsyouthconnected.loadbalancer.server.port=80
 
       # homepage
-      - homepage.group=sportsyouthconnected (.de)
-      - homepage.name=web
       - homepage.weight=-999
-      - homepage.description=nginx:alpine
-      - homepage.showStats=true
+      - homepage.group=sportsyouthconnected (.de)
+      - homepage.name=nginx
+      - homepage.description=nginx:1.25-alpine3.18
       - homepage.icon=nginx.png
       - homepage.href=https://sportsyouthconnected.de
       - homepage.ping=https://sportsyouthconnected.de
+      - homepage.showStats=true
 
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+      - traefik
+
+    # volumes
     volumes:
-      - ./configuration/nginx:/etc/nginx/conf.d:ro
-      - ./volumes/wordpress:/var/www/html:cached
 
-    restart: unless-stopped
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
 
+      # config
+      - ./config/nginx/conf.d:/etc/nginx/conf.d:ro
+
+      # other volumes
+      - ./data/wordpress/html:/var/www/html:cached
+
+    # healthcheck, restart
     healthcheck:
       test: curl -s --fail http://localhost
-
-
-  app:
-
-    # https://hub.docker.com/_/wordpress/tags
-    image: wordpress:6.3.0-php8.2-fpm-alpine
     restart: unless-stopped
 
-    depends_on:
+  # https://hub.docker.com/_/wordpress
+  wordpress:
 
-      db:
+    # image, build, depends_on, command
+    image: wordpress:6.3.0-php8.2-fpm-alpine
+    depends_on:
+      mariadb:
         condition: service_healthy
         restart: true
 
-    networks:
-      - default
-
+    # labels
     labels:
-
       # homepage
+      - homepage.weight=-101
       - homepage.group=sportsyouthconnected (.de)
-      - homepage.name=app
-      - homepage.weight=-100
-      - homepage.description=wordpress:fpm-alpine
-      - homepage.showStats=true
+      - homepage.name=wordpress
+      - homepage.description=wordpress:6.3.0-php8.2-fpm-alpine
       - homepage.icon=wordpress.png
+      - homepage.showStats=true
 
+    # env_file, environment
     env_file:
-      - ./configuration/wordpress.env
+      - ./config/.env
+      - ./config/wordpress/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./configuration/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
-      - ./volumes/wordpress:/var/www/html:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # config
+      - ./config/wordpress/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
+
+      # data
+      - ./data/wordpress/html:/var/www/html:cached
+
+    # healthcheck, restart
     healthcheck:
       test: netstat -tnlp | grep fpm -q
-
-
-  db:
-
-    # https://hub.docker.com/_/mariadb/tags
-    image: mariadb:11.0.3-jammy
     restart: unless-stopped
 
-    networks:
-      - default
+  # https://hub.docker.com/_/mariadb
+  mariadb:
 
+    # image, build, depends_on, command
+    image: mariadb:11.0.3-jammy
+
+    # labels
+    labels:
+      # homepage
+      - homepage.weight=-100
+      - homepage.group=sportsyouthconnected (.de)
+      - homepage.name=mariadb
+      - homepage.description=mariadb:11.0.3-jammy
+      - homepage.icon=mariadb.png
+      - homepage.showStats=true
+
+    # env_file, environment
     env_file:
-      - ./configuration/db.env
+      - ./config/.env
+      - ./config/mariadb/.env
 
+    # volumes
     volumes:
-      - ./volumes/db:/var/lib/mysql:cached
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
 
-    labels:
+      # data
+      - ./data/mariadb/mysql:/var/lib/mysql:cached
 
-      # homepage
-      - homepage.group=sportsyouthconnected (.de)
-      - homepage.name=db
-      - homepage.weight=0
-      - homepage.description=mariadb
-      - homepage.showStats=true
-      - homepage.icon=mariadb.png
-
+    # healthcheck, restart
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       start_period: 15s
+    restart: unless-stopped

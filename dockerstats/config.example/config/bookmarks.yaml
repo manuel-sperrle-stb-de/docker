@@ -1,0 +1,151 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/bookmarks
+# all icons on: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/
+
+- Specs:
+
+    - Hetzner AX52:
+        - abbr: SYS
+          href: https://www.hetzner.com/de/dedicated-rootserver/ax52
+
+    - AMD Ryzen™ 7 7700 (8c/16t | 3,8-5,3GHz):
+        - abbr: CPU
+          href: https://www.amd.com/de/products/apu/amd-ryzen-7-7700
+
+    - Average CPU Mark 35159:
+        - abbr: CPU
+          href: https://www.cpubenchmark.net/cpu.php?id=5169&cpu=AMD+Ryzen+7+7700
+
+    - 64 GB DDR5 ECC:
+        - abbr: RAM
+          href: https://www.hetzner.com/de/dedicated-rootserver/ax52
+
+    - 1TB NVMe RAID 1 (soft):
+        - abbr: NVM
+          href: https://www.hetzner.com/de/dedicated-rootserver/ax52
+
+    - 16TB:
+        - abbr: HDD
+          href: https://www.hetzner.com/de/dedicated-rootserver/ax52
+
+    - Debian Linux:
+        - abbr: OS
+          href: https://www.debian.org
+
+
+- Docker Images:
+
+    - alpine:
+        - icon: docker.png
+          href: https://hub.docker.com/_/alpine
+
+    - autoheal (willfarrell/autoheal):
+        - icon: docker.png
+          href: https://hub.docker.com/r/willfarrell/autoheal
+
+    - homepage (ghcr.io/benphelps/homepage):
+        - icon: github-light.png
+          href: https://github.com/benphelps/homepage
+
+    - dolibarr (tuxgasy/dolibarr):
+        - icon: docker.png
+          href: https://hub.docker.com/r/tuxgasy/dolibarr
+
+    - freshrss (freshrss/freshrss):
+        - icon: docker.png
+          href: https://hub.docker.com/r/freshrss/freshrss
+
+    - httpd:
+        - icon: docker.png
+          href: https://hub.docker.com/_/httpd
+
+    - kimai (kimai/kimai2):
+        - icon: docker.png
+          href: https://hub.docker.com/r/kimai/kimai2
+
+    - mariadb:
+        - icon: docker.png
+          href: https://hub.docker.com/_/mariadb
+
+    - matomo:
+        - icon: docker.png
+          href: https://hub.docker.com/_/matomo
+
+    - nginx:
+        - icon: docker.png
+          href: https://hub.docker.com/_/nginx
+
+    - openproject (openproject/community):
+        - icon: docker.png
+          href: https://hub.docker.com/r/openproject/community
+
+    - paperlessngx (paperlessngx/paperless-ngx):
+        - icon: docker.png
+          href: https://hub.docker.com/r/paperlessngx/paperless-ngx
+
+    - pihole (pihole/pihole):
+        - icon: docker.png
+          href: https://hub.docker.com/r/pihole/pihole
+
+    - portainer (portainer/portainer-ce):
+        - icon: docker.png
+          href: https://hub.docker.com/r/portainer/portainer-ce
+
+    - redis:
+        - icon: docker.png
+          href: https://hub.docker.com/_/redis
+
+    - registry:
+        - icon: docker.png
+          href: https://hub.docker.com/_/registry
+
+    - traefik:
+        - icon: docker.png
+          href: https://hub.docker.com/_/traefik
+
+    - whoami (traefik/whoami):
+        - icon: docker.png
+          href: https://hub.docker.com/r/traefik/whoami
+
+    - wordpress:
+        - icon: docker.png
+          href: https://hub.docker.com/_/wordpress
+
+    - yourls:
+        - icon: docker.png
+          href: https://hub.docker.com/_/yourls
+
+
+- Code:
+
+    - GitHub:
+        - icon: github-light.png
+          href: https://github.com
+
+    - Me @GitHub (github.com/stb-de):
+        - icon: github-light.png
+          href: https://github.com/stb-de
+
+    - This project @GitHub (github.com/stb-de/docker):
+        - icon: github-light.png
+          href: https://github.com/stb-de/docker
+
+    - Visual Studio Code:
+        - icon: vscode.png
+          href: https://code.visualstudio.com
+
+    - Visual Studio Code Web (vscode.dev):
+        - icon: vscode.png
+          href: https://vscode.dev
+
+
+- Hosting:
+
+    - Hetzner:
+        - icon: https://www.hetzner.com/_resources/themes/hetzner/images/favicons/favicon-96x96.png
+          href: https://www.hetzner.com
+
+    - Hetzner Login:
+        - icon: https://www.hetzner.com/_resources/themes/hetzner/images/favicons/favicon-96x96.png
+          href: https://accounts.hetzner.com/login

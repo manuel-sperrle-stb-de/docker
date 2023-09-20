@@ -5,17 +5,13 @@ networks:
 
 services:
 
-  dockerstats:
+  # https://github.com/benphelps/homepage/pkgs/container/homepage
+  homepage:
 
-    container_name: dockerstats
-    hostname: dockerstats
+    # image, build, depends_on, command
+    image: ghcr.io/benphelps/homepage:v0.6.33
 
-    # https://github.com/benphelps/homepage/pkgs/container/homepage
-    image: ghcr.io/benphelps/homepage:v0.6.29
-
-    networks:
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -24,19 +20,33 @@ services:
       - traefik.http.services.dockerstats.loadbalancer.server.port=3000
 
       # homepage
-      - homepage.group=docker
-      - homepage.name=dockerstats (.stb.de)
-      - homepage.description=ghcr.io/benphelps/homepage
-      - homepage.showStats=true
+      - homepage.group=dockerstats (.stb.de)
+      - homepage.name=homepage
+      - homepage.description=ghcr.io/benphelps/homepage:v0.6.33
       - homepage.icon=homepage.png
       - homepage.href=https://dockerstats.stb.de
       - homepage.ping=https://dockerstats.stb.de
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - traefik
 
+    # volumes
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
-      - ./configuration/homepage:/app/config:ro
-      - ./configuration/images:/app/public/images:ro
-      - ./volumes/logs:/logs
+
+      # socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # config
+      - ./config/config:/app/config:ro
+      - ./config/images:/app/public/images:ro
+
+      # data
+      - ./data/logs:/logs
+
+    # healthcheck, restart
+    restart: unless-stopped

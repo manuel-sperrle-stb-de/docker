@@ -5,17 +5,13 @@ networks:
 
 services:
 
+  # https://hub.docker.com/r/portainer/portainer-ce
   portainer:
 
-    container_name: portainer
-    hostname: portainer
-
-    # https://hub.docker.com/r/portainer/portainer-ce/tags
+    # image, build, depends_on, command
     image: portainer/portainer-ce:2.18.4-alpine
 
-    networks:
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -24,20 +20,31 @@ services:
       - traefik.http.services.portainer.loadbalancer.server.port=9000
 
       # homepage
-      - homepage.group=docker
-      - homepage.name=portainer (.stb.de)
-      - homepage.description=portainer/portainer-ce
-      - homepage.showStats=true
+      - homepage.group=portainer (.stb.de)
+      - homepage.name=portainer
+      - homepage.description=portainer/portainer-ce:2.18.4-alpine
       - homepage.icon=portainer.png
       - homepage.href=https://portainer.stb.de
       - homepage.ping=https://portainer.stb.de
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - traefik
 
+    # volumes
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/data:/data:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # socket
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      # data
+      - ./data/data:/data:cached
+
+    # healthcheck, restart
     healthcheck:
       test: wget -q --spider http://127.0.0.1:9000
+    restart: unless-stopped

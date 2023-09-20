@@ -1,30 +1,24 @@
 networks:
 
+  default:
+    enable_ipv6: true
+
   traefik:
     external: true
 
-  dolibarr:
-    enable_ipv6: true
-
 services:
 
+  # https://hub.docker.com/r/tuxgasy/dolibarr
   dolibarr:
 
-    container_name: dolibarr
-    hostname: dolibarr
-
-    # https://hub.docker.com/r/tuxgasy/dolibarr/tags
+    # image, build, depends_on, command
     image: tuxgasy/dolibarr:17.0.2
-
     depends_on:
-      dolibarr-db:
+      mariadb:
         condition: service_healthy
         restart: true
 
-    networks:
-      - traefik
-      - dolibarr
-
+    # labels
     labels:
 
       # traefik
@@ -33,55 +27,73 @@ services:
       - traefik.http.services.dolibarr.loadbalancer.server.port=80
 
       # homepage
-      - homepage.group=dolibarr (.stb.de)
-      - homepage.name=dolibarr (dolibarr.stb.de)
       - homepage.weight=-999
-      - homepage.description=tuxgasy/dolibarr
-      - homepage.showStats=true
+      - homepage.group=dolibarr (.stb.de)
+      - homepage.name=dolibarr
+      - homepage.description=tuxgasy/dolibarr:17.0.2
       - homepage.icon=dolibarr.png
       - homepage.href=https://dolibarr.stb.de
       - homepage.ping=https://dolibarr.stb.de
+      - homepage.showStats=true
 
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+      - traefik
+
+    # env_file, environment
     env_file:
-      - ./configuration/dolibarr.env
+      - ./config/.env
+      - ./config/dolibarr/.env
 
+    # volumes
     volumes:
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
 
-    restart: unless-stopped
-
+    # healthcheck, restart
     healthcheck:
       test: curl -s --fail http://localhost
+    restart: unless-stopped
 
-  dolibarr-db:
+  # https://hub.docker.com/_/mariadb
+  mariadb:
 
-    container_name: dolibarr-db
-    hostname: dolibarr-db
-
-    # https://hub.docker.com/_/mariadb/tags
+    # image, build, depends_on, command
     image: mariadb:11.0.3-jammy
 
-    networks:
-      - dolibarr
-
+    # labels
     labels:
 
       # homepage
+      - homepage.weight=-101
       - homepage.group=dolibarr (.stb.de)
-      - homepage.name=dolibarr-db
-      - homepage.description=mariadb
-      - homepage.showStats=true
+      - homepage.name=mariadb
+      - homepage.description=mariadb:11.0.3-jammy
       - homepage.icon=mariadb.png
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - default
 
+    # env_file, environment
     env_file:
-      - ./configuration/db.env
+      - ./config/.env
+      - ./config/mariadb/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/db:/var/lib/mysql:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/mariadb/mysql:/var/lib/mysql:cached
+
+    # healthcheck, restart
     healthcheck:
       test: healthcheck.sh --su=root --connect --innodb_initialized
       start_period: 15s
+    restart: unless-stopped

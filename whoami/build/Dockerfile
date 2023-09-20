@@ -1,13 +1,20 @@
-ARG baseImage
-ARG alpineImage
+# https://docs.docker.com/build/building/multi-stage/
 
-FROM ${baseImage} AS base
+# https://hub.docker.com/r/traefik/whoami
+ARG baseRespository="traefik/whoami"
+ARG baseTag="latest"
 
-FROM ${alpineImage}
+# https://hub.docker.com/_/alpine/
+ARG releaseRepository="alpine"
+ARG releaseTag="latest"
+
+FROM ${baseRespository}:${baseTag} AS base
+
+FROM ${releaseRepository}:${releaseTag}
 COPY --from=base /whoami /
 
 ENTRYPOINT [ "/whoami" ]
 
 EXPOSE 80
 
-HEALTHCHECK CMD [ "wget", "--spider", "localhost" ]
+HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 CMD [ "wget", "--spider", "localhost" ]

@@ -5,30 +5,28 @@ networks:
 
 services:
 
+  # https://hub.docker.com/r/traefik/whoami
+  # https://hub.docker.com/_/alpine/
   whoami:
 
-    container_name: whoami
-    hostname: whoami
-
-    image: whoami-alpine:v1.10.1-3.18.3
-
+    # image, build, depends_on, command
+    image: traefik/whoami-alpine:v1.10.1-3.18.3
     build:
       context: build
-
       args:
 
-        # https://hub.docker.com/r/traefik/whoami/tags
-        baseImage: traefik/whoami:v1.10.1
+        # https://hub.docker.com/r/traefik/whoami
+        - baseRespository=traefik/whoami
+        - baseTag=v1.10.1
 
-        # https://hub.docker.com/_/alpine/tags
-        alpineImage: alpine:3.18.3
+        # https://hub.docker.com/_/alpine/
+        - releaseRepository=alpine
+        - releaseTag=3.18.3
 
       tags:
-        - whoami-alpine:v1.10.1-3.18.3
+        - traefik/whoami-alpine:v1.10.1-3.18.3
 
-    networks:
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -37,15 +35,23 @@ services:
       - traefik.http.services.whoami.loadbalancer.server.port=80
 
       # homepage
-      - homepage.group=docker
-      - homepage.name=whoami (.stb.de)
-      - homepage.description=traefik/whoami
-      - homepage.showStats=true
+      - homepage.group=whoami (.stb.de)
+      - homepage.name=whoami
+      - homepage.description=traefik/whoami-alpine:v1.10.1-3.18.3 (build)
       - homepage.icon=traefik.png
       - homepage.href=https://whoami.stb.de
       - homepage.ping=https://whoami.stb.de
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - traefik
 
+    # volumes
     volumes:
+
+      # localtime
       - /etc/localtime:/etc/localtime:ro
+
+    # healthcheck, restart
+    restart: unless-stopped

@@ -1,0 +1,29 @@
+tls:
+
+  # default generated cert via ACME default resolver
+  stores:
+    default:
+      defaultGeneratedCert:
+        resolver: hetznerdns
+        domain:
+          main: '*.stb.de'
+
+http:
+
+  routers:
+
+    jugendsportkongress:
+      rule: "Host(`jugendsportkongress.de`)"
+      service: "traefik@docker"
+      tls:
+        certResolver: hetznerdns
+        domains:
+          - main = "*.jugendsportkongress.de"
+      middlewares: sportsyouthconnected
+
+  middlewares:
+
+    sportsyouthconnected:
+      redirectRegex:
+        regex: ".*"
+        replacement: "https://sportsyouthconnected.de"

@@ -1,0 +1,117 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/settings
+
+logpath: /
+
+#providers:
+#  openweathermap: openweathermapapikey
+#  weatherapi: weatherapiapikey
+
+background:
+  image: /images/background.png
+  blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 25 # 0-100
+
+color: neutral
+
+layout:
+
+  autoheal:
+    icon: docker.png
+    tab: host
+    style: row
+
+  dashboard (.stb.de):
+    icon: homepage.png
+    tab: host
+    style: row
+
+  dockerstats (.stb.de):
+    icon: homepage.png
+    tab: host
+    style: row
+
+  portainer (.stb.de):
+    icon: portainer.png
+    tab: host
+    style: row
+
+  registry (.stb.de):
+    icon: docker.png
+    tab: host
+    style: row
+
+  traefik (.stb.de):
+    icon: traefik.png
+    tab: host
+    style: row
+
+  whoami (.stb.de):
+    icon: traefik.png
+    tab: host
+    style: row
+
+
+  dolibarr (.stb.de):
+    icon: dolibarr.png
+    tab: service
+    style: row
+
+  freshrss (.stb.de):
+    icon: freshrss.png
+    tab: service
+    style: row
+
+  kimai (.stb.de):
+    icon: kimai.png
+    tab: service
+    style: row
+
+  matomo (.stb.de):
+    icon: matomo.png
+    tab: service
+    style: row
+
+  openproject (.stb.de):
+    icon: openproject.png
+    tab: service
+    style: row
+
+  paperlessngx (.stb.de):
+    icon: paperless.png
+    tab: service
+    style: row
+
+  yourls (.stb.de):
+    icon: yourls.png
+    tab: service
+    style: row
+
+
+  wordpress (.stb.de):
+    icon: wordpress.png
+    tab: website
+    style: row
+
+  functionaltraining (.stb.de):
+    icon: wordpress.png
+    tab: website
+    style: row
+
+  sportsyouthconnected (.de):
+    icon: wordpress.png
+    tab: website
+    style: row
+
+
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: true
+  hideVisitURL: true
+
+theme: dark
+
+title: dockerstats.stb.de

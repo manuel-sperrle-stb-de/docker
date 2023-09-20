@@ -6,25 +6,19 @@ networks:
   traefik:
     external: true
 
-
 services:
 
-  web:
+  # https://hub.docker.com/r/freshrss/freshrss/
+  freshrss:
 
-    # https://hub.docker.com/r/freshrss/freshrss/
+    # image, build, depends_on, command
     image: freshrss/freshrss:1.21.0-alpine
-    restart: unless-stopped
-
     depends_on:
-
-      db:
+      mariadb:
         condition: service_healthy
         restart: true
 
-    networks:
-      - default
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -33,51 +27,75 @@ services:
       - traefik.http.services.freshrss.loadbalancer.server.port=80
 
       # homepage
-      - homepage.weight=-100
+      - homepage.weight=-999
       - homepage.group=freshrss (.stb.de)
-      - homepage.name=web
+      - homepage.name=freshrss
       - homepage.description=freshrss/freshrss:1.21.0-alpine
-      - homepage.showStats=true
       - homepage.icon=freshrss.png
       - homepage.href=https://freshrss.stb.de
       - homepage.ping=https://freshrss.stb.de
+      - homepage.showStats=true
 
-    env_file:
-      - ./config/freshrss.env
-
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/data:/var/www/FreshRSS/data:cached
-      - ./volumes/extensions:/var/www/FreshRSS/extensions:cached
-
-    #healthcheck:
-    #  test: wget --spider localhost
-
-  db:
-
-    # https://hub.docker.com/_/mariadb/tags
-    image: mariadb:11.0.3-jammy
-    restart: unless-stopped
-
+    # container_name, hostname, networks, ports
     networks:
       - default
+      - traefik
 
+    # env_file, environment
     env_file:
-      - ./config/db.env
+      - ./config/freshrss/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/db:/var/lib/mysql:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/freshrss/data:/var/www/FreshRSS/data:cached
+      - ./data/freshrss/extensions:/var/www/FreshRSS/extensions:cached
+
+    # healthcheck, restart
+    healthcheck:
+      test: (php -r "readfile('http://127.0.0.1/i/');" | grep -q 'jsonVars') || exit 1
+    restart: unless-stopped
+
+  # https://hub.docker.com/_/mariadb
+  mariadb:
+
+    # image, build, depends_on, command
+    image: mariadb:11.0.3-jammy
+
+    # labels
     labels:
 
       # homepage
+      - homepage.weight=-100
       - homepage.group=freshrss (.stb.de)
-      - homepage.name=db
-      - homepage.description=mariadb
-      - homepage.showStats=true
+      - homepage.name=mariadb
+      - homepage.description=mariadb:11.0.3-jammy
       - homepage.icon=mariadb.png
+      - homepage.showStats=true
 
+    # container_name, hostname, networks, ports
+    networks:
+      - default
+
+    # env_file, environment
+    env_file:
+      - ./config/mariadb/.env
+
+    # volumes
+    volumes:
+
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # data
+      - ./data/mariadb/mysql:/var/lib/mysql:cached
+
+    # healthcheck, restart
     healthcheck:
       test: healthcheck.sh --su-mysql --connect --innodb_initialized
       start_period: 15s
+    restart: unless-stopped

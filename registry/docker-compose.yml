@@ -5,18 +5,14 @@ networks:
 
 services:
 
+  # https://hub.docker.com/_/registry
+  # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./config/auth/.htpasswd
   registry:
-    # add users: docker run --rm --entrypoint htpasswd httpd:2 -Bbn username password >> ./volumes/auth/.htpasswd
 
-    container_name: registry
-    hostname: registry
-
-    # https://hub.docker.com/_/registry/tags
+    # image, build, depends_on, command
     image: registry:2.8.2
 
-    networks:
-      - traefik
-
+    # labels
     labels:
 
       # traefik
@@ -25,23 +21,35 @@ services:
       - traefik.http.services.registry.loadbalancer.server.port=5000
 
       # homepage
-      - homepage.group=docker
-      - homepage.name=registry (.stb.de)
-      - homepage.description=registry
-      - homepage.showStats=true
+      - homepage.group=registry (.stb.de)
+      - homepage.name=registry
+      - homepage.description=registry:2.8.2
       - homepage.icon=docker.png
       - homepage.href=https://registry.stb.de/v2
       - homepage.ping=https://registry.stb.de
+      - homepage.showStats=true
 
-    restart: unless-stopped
+    # container_name, hostname, networks, ports
+    networks:
+      - traefik
 
+    # env_file, environment
     env_file:
-      - ./configuration/registry.env
+      - ./config/.env
 
+    # volumes
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./configuration/auth:/auth:cached
-      - ./volumes/data:/var/lib/registry:cached
 
+      # localtime
+      - /etc/localtime:/etc/localtime:ro
+
+      # config
+      - ./config/auth:/auth:cached
+
+      # data
+      - ./data/data:/var/lib/registry:cached
+
+    # healthcheck, restart
     healthcheck:
       test: wget -q --spider http://127.0.0.1:5000
+    restart: unless-stopped

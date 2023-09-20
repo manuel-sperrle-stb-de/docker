@@ -1,0 +1,289 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/services
+
+- services (*.stb.de):
+
+    - stb-host.de:
+        href: https://traefik.stb.de
+        ping: https://traefik.stb.de/dashboard
+
+    - dashboard.stb.de:
+        href: https://dashboard.stb.de
+        ping: https://dashboard.stb.de
+
+    - dockerstats.stb.de:
+        href: https://dockerstats.stb.de
+        ping: https://dockerstats.stb.de
+
+    - dolibarr.stb.de:
+        href: https://dolibarr.stb.de
+        ping: https://dolibarr.stb.de
+
+    - elearning.stb.de:
+        href: https://elearning.stb.de
+        ping: https://elearning.stb.de
+
+    - ergebnisdienst.stb.de:
+        href: https://ergebnisdienst.stb.de
+        ping: https://ergebnisdienst.stb.de
+
+    - ergebnisdienst.stb-liga.de:
+        href: https://ergebnisdienst.stb-liga.de
+        ping: https://ergebnisdienst.stb-liga.de
+
+    - feedback.stb.de:
+        href: https://feedback.stb.de
+        ping: https://feedback.stb.de
+
+    - freshrss.stb.de:
+        href: https://freshrss.stb.de
+        ping: https://freshrss.stb.de
+
+    - functionaltraining.stb.de:
+        href: https://functionaltraining.stb.de
+        ping: https://functionaltraining.stb.de
+
+    - kimai.stb.de:
+        href: https://kimai.stb.de
+        ping: https://kimai.stb.de/de/login
+
+    - kuti.stb-liga.de:
+        href: https://kuti.stb-liga.de
+        ping: https://kuti.stb-liga.de
+
+    - kutu.stb-liga.de:
+        href: https://kutu.stb-liga.de
+        ping: https://kutu.stb-liga.de
+
+    - link.stb.de:
+        href: https://link.stb.de
+        ping: https://link.stb.de
+
+    - mailing.stb.de:
+        href: https://mailing.stb.de
+        ping: https://mailing.stb.de
+
+    - matomo.stb.de:
+        href: https://matomo.stb.de
+        ping: https://matomo.stb.de
+
+    - mportal.stb.de:
+        href: https://mportal.stb.de
+        ping: https://mportal.stb.de
+
+    - nas.stb.de:
+        href: https://nas.stb.de
+        ping: https://nas.stb.de
+
+    - openproject.stb.de:
+        href: https://openproject.stb.de
+        ping: https://openproject.stb.de
+
+    - paperlessngx.stb.de:
+        href: https://paperlessngx.stb.de
+        ping: https://paperlessngx.stb.de
+
+    - snipeitapp.stb.de:
+        href: https://snipeitapp.stb.de
+        ping: https://snipeitapp.stb.de
+
+    - voteathome.stb.de:
+        href: https://voteathome.stb.de
+        ping: https://voteathome.stb.de
+
+    - whoami.stb.de:
+        href: https://whoami.stb.de
+        ping: https://whoami.stb.de
+
+    - wordpress.stb.de:
+        href: https://wordpress.stb.de
+        ping: https://wordpress.stb.de
+
+    - yourls.stb.de:
+        href: https://yourls.stb.de
+        ping: https://yourls.stb.de
+
+    - zammad.stb.de:
+        href: https://zammad.stb.de
+        ping: https://zammad.stb.de
+
+
+- websites (*.stb.de):
+
+    - www.stb.de:
+        href: https://www.stb.de/
+        ping: https://www.stb.de/
+
+    - 4-in-motion.de:
+        href: https://4-in-motion.de
+        ping: https://4-in-motion.de
+
+    - aktif-bw.de:
+        href: https://aktif-bw.de
+        ping: https://aktif-bw.de
+
+    - clubsportif2030.ch:
+        href: https://clubsportif2030.ch
+        ping: https://clubsportif2030.ch
+
+    - enbw-dtbpokal.de:
+        href: https://www.enbw-dtbpokal.de
+        ping: https://www.enbw-dtbpokal.de
+
+    - gymwelt-bw.de:
+        href: https://gymwelt-bw.de
+        ping: https://gymwelt-bw.de
+
+    - jugendsportkongress.de:
+        href: https://jugendsportkongress.de
+        ping: https://jugendsportkongress.de
+
+    - kindersportschulen.de:
+        href: https://kindersportschulen.de
+        ping: https://kindersportschulen.de
+
+    - kinderturn-kongress.de:
+        href: https://kinderturn-kongress.de
+        ping: https://kinderturn-kongress.de
+
+    - landeskinderturnfest.org:
+        href: https://www.landeskinderturnfest.org
+        ping: https://www.landeskinderturnfest.org
+
+    - app.landeskinderturnfest.org:
+        href: https://app.landeskinderturnfest.org
+        ping: https://app.landeskinderturnfest.org
+
+    - landesturnfest.org:
+        href: https://www.landesturnfest.org
+        ping: https://www.landesturnfest.org
+
+    - rsg.stb.de:
+        href: https://rsg.stb.de
+        ping: https://rsg.stb.de
+
+    - schoolinmotion.de:
+        href: https://schoolinmotion.de
+        ping: https://schoolinmotion.de
+
+    - schuleturnt.de:
+        href: https://schuleturnt.de
+        ping: https://schuleturnt.de
+
+    - sportkongress-stuttgart.de:
+        href: https://www.sportkongress-stuttgart.de
+        ping: https://www.sportkongress-stuttgart.de
+
+    - sportsyouthconnected.de:
+        href: https://sportsyouthconnected.de
+        ping: https://sportsyouthconnected.de
+
+    - stbcampus.org:
+        href: https://stbcampus.org
+        ping: https://stbcampus.org
+
+    - stuttgart2019.de:
+        href: https://stuttgart2019.de
+        ping: https://stuttgart2019.de
+
+    - turngala.de:
+        href: https://www.turngala.de
+        ping: https://www.turngala.de
+
+    - verein2030.ch:
+        href: https://verein2030.ch
+        ping: https://verein2030.ch
+
+    - verein2030.de:
+        href: https://www.verein2030.de
+        ping: https://www.verein2030.de
+
+
+- Kinderturnstiftung BW:
+
+    - kinderturnstiftung-bw.de:
+        href: https://kinderturnstiftung-bw.de
+        ping: https://kinderturnstiftung-bw.de
+
+    - turnbeutelbande.de:
+        href: https://turnbeutelbande.de
+        ping: https://turnbeutelbande.de
+
+
+- Turngaue:
+
+    - tgnt.de:
+        href: https://www.tgnt.de
+        ping: https://www.tgnt.de
+
+    - tgow.de:
+        href: https://tgow.de
+        ping: https://tgow.de
+
+    - tg-zs.info:
+        href: https://www.tg-zs.info
+        ping: https://www.tg-zs.info
+
+    - turngau-achalm.de:
+        href: https://www.turngau-achalm.de
+        ping: https://www.turngau-achalm.de/aktuelles.html # !
+
+    - turngau-heilbronn.de:
+        href: https://turngau-heilbronn.de
+        ping: https://turngau-heilbronn.de
+
+    - turngau-hohenlohe.de:
+        href: https://turngau-hohenlohe.de
+        ping: https://turngau-hohenlohe.de
+
+    - turngau-hohenzollern.de:
+        href: https://turngau-hohenzollern.de
+        ping: https://turngau-hohenzollern.de
+
+    - turngau-neckar-enz.de:
+        href: https://turngau-neckar-enz.de
+        ping: https://turngau-neckar-enz.de
+
+    - turngau-nordschwarzwald.de:
+        href: https://turngau-nordschwarzwald.de
+        ping: https://turngau-nordschwarzwald.de
+
+    - turngau-oberschwaben.de:
+        href: https://www.turngau-oberschwaben.de
+        ping: https://www.turngau-oberschwaben.de
+
+    - turngau-rm.de:
+        href: https://www.turngau-rm.de
+        ping: https://www.turngau-rm.de
+
+    - turngau-schwarzwald.de:
+        href: https://turngau-schwarzwald.de
+        ping: https://turngau-schwarzwald.de
+
+    - turngau-staufen.de:
+        href: https://turngau-staufen.de
+        ping: https://turngau-staufen.de
+
+    - turngau-stuttgart.de:
+        href: https://turngau-stuttgart.de
+        ping: https://turngau-stuttgart.de
+
+    - turngau-ulm.de:
+        href: https://turngau-ulm.de
+        ping: https://turngau-ulm.de
+
+
+- Websites 3rd party:
+
+    - fitness-im-verein.de:
+        href: https://fitness-im-verein.de/
+        ping: https://fitness-im-verein.de/
+
+    - gymcard.de:
+        href: https://gymcard.de
+        ping: https://gymcard.de
+
+    - stb.w2p-portal.de:
+        href: https://stb.w2p-portal.de
+        ping: https://stb.w2p-portal.de

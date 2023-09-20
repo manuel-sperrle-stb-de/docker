@@ -1,9 +1,0 @@
-tls:
-
-  # default generated cert via ACME default resolver
-  stores:
-    default:
-      defaultGeneratedCert:
-        resolver: hetznerdns
-        domain:
-          main: '*.yourdomain.tld'
